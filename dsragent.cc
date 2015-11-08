@@ -452,6 +452,11 @@ DSRAgent::command(int argc, const char*const* argv)
 	  testinit();
 	  return TCL_OK;
 	}
+      if (strcasecmp(argv[1], "malicious") == 0)
+	{
+	  malicious = true;
+	  return TCL_OK;
+	}
       if (strcasecmp(argv[1], "reset") == 0)
 	{
 	  Terminate();

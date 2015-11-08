@@ -187,6 +187,7 @@ $node_(1) set Z_ 0.0
 $node_(2) set X_ 125.0
 $node_(2) set Y_ 125.0
 $node_(2) set Z_ 0.0
+$node_(2) set ragent_ malicious
 
 #Node D (Good)
 $node_(3) set X_ 125.0
