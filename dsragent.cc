@@ -443,8 +443,7 @@ DSRAgent::testinit()
 int
 DSRAgent::command(int argc, const char*const* argv)
 {
-  TclObject *obj;  
-
+  TclObject *obj;
   if (argc == 2) 
     {
       if (strcasecmp(argv[1], "testinit") == 0)
@@ -454,6 +453,7 @@ DSRAgent::command(int argc, const char*const* argv)
 	}
       if (strcasecmp(argv[1], "malicious") == 0)
 	{
+    	  trace("Malicious set to true");
 	  malicious = true;
 	  return TCL_OK;
 	}
@@ -507,6 +507,7 @@ DSRAgent::command(int argc, const char*const* argv)
 	} 
       else if(strcasecmp(argv[1], "mac-addr") == 0) 
 	{
+      trace("MAC BEING SET to : %u ",atoi(argv[2]));
 	  MAC_id = ID(atoi(argv[2]), ::MAC);
 	  route_cache->MAC_id = MAC_id;
 	  return TCL_OK;
@@ -603,6 +604,7 @@ DSRAgent::recv(Packet* packet, Handler*)
   /* handle packets with a MAC destination address of this host, or
      the MAC broadcast addr */
 {
+	trace("Received a Packet. My ID : %u",MAC_id.addr);
   hdr_sr *srh =  hdr_sr::access(packet);
   hdr_ip *iph =  hdr_ip::access(packet);
   hdr_cmn *cmh =  hdr_cmn::access(packet);
@@ -1269,6 +1271,7 @@ DSRAgent::sendOutPacketWithRoute(SRPacket& p, bool fresh, Time delay)
      //  is false then our caller wants us use a path with the index
      //  set as it currently is
 {
+	trace ("Sending out Packet! My id : %u", MAC_id.addr);
   hdr_sr *srh =  hdr_sr::access(p.pkt);
   hdr_cmn *cmnh = hdr_cmn::access(p.pkt);
 

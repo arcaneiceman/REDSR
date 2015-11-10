@@ -99,8 +99,8 @@ Antenna/OmniAntenna set Gr_ 1.0
 # Initialize the SharedMedia interface with parameters to make
 # it work like the 914MHz Lucent WaveLAN DSSS radio interface
 $val(netif) set CPThresh_ 10.0
-$val(netif) set CSThresh_ 5.8442e-09  ;#sensing range of 125m
-$val(netif) set RXThresh_ 5.8442e-09  ;#communication range of 125m
+$val(netif) set CSThresh_ 7.69113e-06  ;#sensing range of 125m
+$val(netif) set RXThresh_ 7.69113e-06 ;#communication range of 125m
 $val(netif) set Rb_ 2*1e6
 $val(netif) set Pt_ 0.2818
 $val(netif) set freq_ 914e+6 
@@ -175,12 +175,12 @@ $node_(3) random-motion 0
 
 #Node A
 $node_(0) set X_ 25.0
-$node_(0) set Y_ 100.0
+$node_(0) set Y_ 75.0
 $node_(0) set Z_ 0.0
 
 #Node B
 $node_(1) set X_ 225.0
-$node_(1) set Y_ 100.0
+$node_(1) set Y_ 75.0
 $node_(1) set Z_ 0.0
 
 #Node C (Evil)

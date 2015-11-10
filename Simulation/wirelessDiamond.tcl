@@ -187,7 +187,7 @@ $node_(1) set Z_ 0.0
 $node_(2) set X_ 125.0
 $node_(2) set Y_ 125.0
 $node_(2) set Z_ 0.0
-$node_(2) set ragent_ malicious
+$ns_ at 0.0 "[$node_(2) set ragent_] malicious"
 
 #Node D (Good)
 $node_(3) set X_ 125.0
@@ -195,6 +195,11 @@ $node_(3) set Y_ 25.0
 $node_(3) set Z_ 0.0
 #
 
+#Mac ID 
+$ns_ at 0.0 "[$node_(0) set ragent_] mac-addr 00"
+$ns_ at 0.0 "[$node_(1) set ragent_] mac-addr 10"
+$ns_ at 0.0 "[$node_(2) set ragent_] mac-addr 20"
+$ns_ at 0.0 "[$node_(3) set ragent_] mac-addr 30"
 
 for {set i 0} {$i < $val(nn)} {incr i} {
 	$ns_ initial_node_pos $node_($i) 5
