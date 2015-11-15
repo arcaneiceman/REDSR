@@ -1269,7 +1269,7 @@ DSRAgent::sendOutPacketWithRoute(SRPacket& p, bool fresh, Time delay)
      // return value is not very meaningful
      // if fresh is true then reset the path before using it, if fresh
      //  is false then our caller wants us use a path with the index
-     //  set as it currently is
+ //  set as it currently isk
 {
 	trace ("Sending out Packet! My id : %u", MAC_id.addr);
   hdr_sr *srh =  hdr_sr::access(p.pkt);

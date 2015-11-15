@@ -66,6 +66,13 @@ extern "C" {
 #include "routecache.h"
 #ifdef DSR_CACHE_STATS
 #include "cache_stats.h"
+
+//------fstream setup----//
+#include <fstream>
+#include <iostream>
+#include <vector>
+
+
 #endif
 
 
@@ -148,6 +155,8 @@ public:
   // already
   int command(int argc, const char*const* argv);
 
+  //vector<int> trustValues;
+
 protected:
   Cache *primary_cache;   /* routes that we are using, or that we have reason
 			     to believe we really want to hold on to */
@@ -206,7 +215,8 @@ MobiCache::command(int argc, const char*const* argv)
   if(argc == 2 && strcasecmp(argv[1], "startdsr") == 0)
     { 
       if (ID(1,::IP) == net_id) 
-	trace("Sconfig %.5f using MOBICACHE", Scheduler::instance().clock());
+    	  trace("Sconfig %.5f using MOBICACHE", Scheduler::instance().clock());
+      	  //Read Dictionary
       // FALL-THROUGH
     }
   return RouteCache::command(argc, argv);
@@ -323,6 +333,16 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
   if(pre_addRoute(route, rt, t, who_from) == 0)
     return;
 
+  trace("Adding Route. My ID : %u",MAC_id.addr);
+  trace("Route is %s",rt.dump());
+
+  //if(trustValues.size()!= 0){
+	  //Find trust value min
+  //} else {
+
+
+  //}
+
   // must call addRoute before checkRoute
   int prefix_len = 0;
 
@@ -332,6 +352,7 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 #else
   (void) primary_cache->addRoute(rt, prefix_len);
 #endif
+  trace("Check Trust  : %f",rt.getTrust());
 }
 
 void
@@ -410,6 +431,15 @@ MobiCache::findRoute(ID dest, Path& route, int for_me)
       index++;
     }
 
+  if(min_cache){
+	  trace("Route Found: %s",route.dump());
+	  trace("Route has trust value of %f",route.getTrust());
+  }
+  else {
+	  trace("Route Not Found");
+  }
+
+
   if (min_cache == 1 && for_me)
     { // promote the found route to the primary cache
       int prefix_len;
@@ -472,6 +502,7 @@ MobiCache::findRoute(ID dest, Path& route, int for_me)
 #endif
       return false;
     }
+
 }
 
 /*===========================================================================
@@ -513,7 +544,6 @@ Cache::addRoute(Path & path, int &common_prefix_len)
 {
   int index, m, n;
   int victim;
-
   // see if this route is already in the cache
   for (index = 0 ; index < size ; index++)
     { // for all paths in the cache
@@ -546,7 +576,6 @@ Cache::addRoute(Path & path, int &common_prefix_len)
 	{ // keep looking at the rest of the cache 
 	}
     } 
-
   // there are some new goodies in the new route
   victim = pickVictim();
   if(verbose_debug) {
@@ -619,6 +648,7 @@ routecache->trace("Sdebug %.9f _%s_ freshening %s->%s to %d %.9f",
 	    }
 	}
     }
+  cache[index].setTrust(0.23);
   return &cache[index];
 }
 
@@ -826,3 +856,8 @@ MobiCache::checkRoute(Path *p, int action, int prefix_len)
 #endif /* DSR_CACHE_STATS */
 
 //#endif /* DSR_MOBICACHE */
+/*int read_from_file(char file_name_r)
+{
+  
+  
+}*/
