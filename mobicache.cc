@@ -155,6 +155,7 @@ public:
   // already
   int command(int argc, const char*const* argv);
 
+  void updateRouteTrust(Path path, float value);
   //vector<int> trustValues;
 
 protected:
@@ -335,14 +336,6 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 
   trace("Adding Route. My ID : %u",MAC_id.addr);
   trace("Route is %s",rt.dump());
-
-  //if(trustValues.size()!= 0){
-	  //Find trust value min
-  //} else {
-
-
-  //}
-
   // must call addRoute before checkRoute
   int prefix_len = 0;
 
@@ -352,8 +345,29 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 #else
   (void) primary_cache->addRoute(rt, prefix_len);
 #endif
-  trace("Check Trust  : %f",rt.getTrust());
+
+  /* Wali Edit : Adding Trust */
+  for(int i=0; i<primary_cache->size; i++){
+	  if(primary_cache->cache[i]==rt){
+		  //Set this on min function
+		  primary_cache->cache[i].setTrust(0.23);
+	  }
+  }
+  /* End of Edit */
 }
+
+
+/* Wali Edit : Update Trust Value */
+void
+MobiCache::updateRouteTrust(Path path, float value){
+	for(int i=0 ; i<primary_cache->size; i++){
+		if(path==primary_cache->cache[i]){
+			primary_cache->cache[i].setTrust(value);
+		}
+	}
+}
+/* End of Edit */
+
 
 void
 MobiCache::noticeDeadLink(const ID&from, const ID& to, Time)
@@ -433,7 +447,15 @@ MobiCache::findRoute(ID dest, Path& route, int for_me)
 
   if(min_cache){
 	  trace("Route Found: %s",route.dump());
-	  trace("Route has trust value of %f",route.getTrust());
+	  for(int i =0; i<primary_cache->size; i++){
+		  if(primary_cache->cache[i]==route){
+			  // and dest is the same
+			  trace("I am Node %u",MAC_id.addr);
+			  trace("Route Cache Hit: Trust value for Route # %d",i);
+			  trace("Route Cache Hit: Route is %s",primary_cache->cache[i].dump());
+			  trace("Route Cache Hit: Route's trust value is %f",primary_cache->cache[i].getTrust());
+		  }
+	    }
   }
   else {
 	  trace("Route Not Found");
@@ -648,10 +670,8 @@ routecache->trace("Sdebug %.9f _%s_ freshening %s->%s to %d %.9f",
 	    }
 	}
     }
-  cache[index].setTrust(0.23);
   return &cache[index];
 }
-
 
 void
 Cache::noticeDeadLink(const ID&from, const ID& to)
