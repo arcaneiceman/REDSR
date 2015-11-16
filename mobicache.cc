@@ -70,7 +70,7 @@ extern "C" {
 
 #endif
 
-/*
+
 #include <cstring>
 #include <string>
 #include "string.h"
@@ -82,14 +82,14 @@ extern "C" {
 #include <vector>
 #include <cstdlib>
 #include <list>
-using namespace std;
 
+using namespace std;
 using std::string;
 using std::ostream;
 using std::list;
 using std::endl;
 
-*/
+//---end fstream setup ----//
 
 /* invariants
 
@@ -880,10 +880,13 @@ int read_from_file(string file_name_r)
 }
 */
 
+
+
 //*********************************************************//
 //-------Parser functon version 1, version 2 is below------//
 //********************************************************//
-/*
+///*
+
 //The function to split the lines up that will be used by the parser. Can also be used by itself. 
 void split_line(string& line, string delim, list<string>& values)
 {
@@ -944,7 +947,7 @@ std::vector<int> read_from_file(std::string& file_name_r)
     return parsed_vals;
 }
 
-*/
+//*/
 
 //*******************************************************//
 //---------Parser Function Version 2--------------------//
