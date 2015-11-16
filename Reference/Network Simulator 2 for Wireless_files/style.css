@@ -1,0 +1,56 @@
+P {
+	FONT-SIZE: 14px; COLOR: #000000; TEXT-INDENT: 0px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: deafult
+}
+H2 {
+FONT-SIZE: 24px; COLOR: #FF44FF; TEXT-INDENT: 10px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: deafult
+}
+
+
+H3 {
+FONT-SIZE: 20px; COLOR: #008800; TEXT-INDENT: 10px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: deafult
+}
+.text {
+       FONT-SIZE: 14px; COLOR: #000000; TEXT-INDENT: 5px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: deafult
+}
+.news {
+       FONT-SIZE: 10px; COLOR: #000000; TEXT-INDENT: 0px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: deafult
+}
+A:link {
+	FONT-SIZE: 14px; COLOR: #008000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+A:visited {
+	FONT-SIZE: 14px; COLOR: #008000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+A:hover {
+	FONT-SIZE: 14px; COLOR: #008000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.down {
+         FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+}
+A.down:link {
+	 FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #00800; FONT-SIZE: 10px; TEXT-DECORATION: none
+}
+A.down:visited {
+	 FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #008000; FONT-SIZE: 10px; TEXT-DECORATION: none
+}
+A.down:hover {
+	 FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #008000; FONT-SIZE: 10px; TEXT-DECORATION: underline
+}
+A.down:active {
+	 FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #008000; FONT-SIZE: 10px; TEXT-DECORATION: none
+}
+.top {
+         FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+}
+A.top:link {
+	 FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 10px; TEXT-DECORATION: none
+}
+A.top:visited {
+	 FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 10px; TEXT-DECORATION: none
+}
+A.top:hover {
+	 FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-WEIGHT: bold; FONT-SIZE: 10px; TEXT-DECORATION: none
+}
+A.top:active {
+	 FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; COLOR: #000000; FONT-SIZE: 10px; TEXT-DECORATION: none
+}

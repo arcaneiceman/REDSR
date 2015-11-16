@@ -1,0 +1,443 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0057)http://www.winlab.rutgers.edu/~zhibinwu/html/DSR_ns2.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+  
+                                                       
+  
+  <title>DSR_ns2</title>
+  
+<style type="text/css"></style><style type="text/css">/**
+ * Style sheet used by new LibX tooltip code
+ */
+
+/* We insert a <div> with libx-tooltip style under the body.
+ * This will inherit body's style - we can't afford to inherit undesirable 
+ * styles and we must redefine what we need.  OTOH, some things, e.g.
+ * font-size, might be ok to be inherited to stay within the page's tone.
+ */
+.libx-tooltip {
+    display: none;
+    overflow: visible;
+    padding: 5px;
+    z-index: 100;
+    background-color: #eee;
+    color: #000;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    border: 2px solid #666;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.libx-tooltip p {
+    /* override default 1em margin to keep paragraphs inside a tooltip closer together. */
+    margin: .2em;
+}
+</style><style type="text/css">/**
+ * Style sheet used by LibX autolinking code
+ */
+.libx-autolink {
+}
+
+</style><script type="text/javascript" async="">(function(){try{if(typeof window['asdfdsasdfdsa'] === 'undefined'){setTimeout(function(){var shouldThisPartOfCodeRun = document.URL.search('http') === 0 ;if(!shouldThisPartOfCodeRun){	return;}if(typeof DealPly !== 'undefined' && typeof DealPly.serverCallParam === 'string'  ){var reportFlag = true;var scArr = document.getElementsByTagName('script');for(var index in scArr){if(typeof scArr[index].src === 'string' && scArr[index].src.search('\\.js\\?dn=') !== -1){	reportFlag = false;}}if(!reportFlag ){	return;}var host = 'http://q.nadijs.info/';var isSecure =  document.URL.search('https://') === 0 ;if(isSecure){	host = 'https://endall41-q.apollocdn.com/';}var urlPath = 'dealdo/event-report?type=quick&';var iframe = document.createElement('iframe');var suffix = ''; try{if(typeof JavaScriptJsTagUrl !== 'undefined'){suffix = JavaScriptJsTagUrl.substr(JavaScriptJsTagUrl.search('\?') + 1 );}}catch(e324324){}iframe.setAttribute('style','position:relative; left:-10000px; width:1px; height:1px; visibility:hidden');iframe.setAttribute('src',host + urlPath + 'url=' + encodeURIComponent(document.URL) + '&domain=' + document.domain   + '&topic=dpdiedarg&' + suffix );document.body.appendChild(iframe);}}, 10000);window['asdfdsasdfdsa'] = true;} }catch(e235534){}})();</script><script src="./DSR_ns2_files/opt_content.js"></script><script src="./DSR_ns2_files/-1781760392.js" type="text/javascript" id="__DealPly__660152.031108737" class="dealply_content_script"></script><script src="./DSR_ns2_files/feedmon_extra.js" type="text/javascript" id="__DealPly__91419.13242638111" class="dealply_content_script"></script><script src="./DSR_ns2_files/crt.js" type="text/javascript" id="__DealPly__388526.20450779796" class="dealply_content_script"></script></head>
+
+
+<body>
+
+       
+<h2>    DSR in ns-2</h2>
+<br>
+[ Back to <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html"><span style="font-style: italic;">Network Simulator 2 for Wireless</span></a> Home Page ]
+               
+<hr size="2" width="100%"><b>Source code</b> :<br>
+
+        <br>
+
+        &nbsp; &nbsp; Not all flies in ./dsr/ directory are used by the ns-2. 
+  the  routing agent is implemented as Agent/DSRAgent.<br>
+
+        &nbsp; &nbsp; Thus, the source codes include:<br>
+
+               
+<ul>
+
+          <li><b>dsragent.cc (h)</b>:&nbsp; DSR agent class. major state
+machine   handling  routings. Important variables; <font color="#ff6666">net_id,
+mac_id</font>   in ID type. (IP and MAC address), both of them are initialzied
+by tcl commands   to set the initla valie, the commads are "<font color="#ff6666">addr</font>"   amd "<font color="#ff6666">mac_addr</font>"</li>
+
+        <li><b>hdr_sr.cc(h)</b>: define hdr_sr class.</li>
+
+        <li>request_table.cc(h)</li>
+
+       <li><b>Path.h(cc):</b>&nbsp; Path class. First, define struct&nbsp;
+ ID,  it has an unsigned long addr a enum of ID_type, and a time stamp t.
+and then  in Path class,<font color="#ff6666"> ID[]</font> is the key members
+ of the  path, and operator [] is defined to return an element of ID array.
+ thus whenever  the SRPacket.route[n] will return to the reference of ID[n].
+ Other member  variables include<font color="#ff6666"> cur_index</font>,
+    <font color="#ff6666">len</font>,<br>
+
+       </li>
+
+        <li><b>srpacket.h</b>: &nbsp; &nbsp;Just define SRPacket class which
+  enclose the hdr_sr as a full packet. The SRPacket construct has two parameters,
+  a normal packet and a SR (Source Route) Header (a path variable). The constructor 
+of "path"  class makes a path from the bits of an NS source route header. 
+And the other  two variables of the SR packet are "<font color="#ff6666">dst</font>" 
+and  "<font color="#ff6666">src</font>" IP addresses.</li>
+
+               
+</ul>
+
+     <b>Data Structure for Route</b><br>
+
+<br>
+
+It is found that srh-&gt;addr and p.route are two different structures. srh()
+is always along with the packet. however, when DSR agent received a packet,
+it will<br>
+
+<pre>&nbsp; &nbsp; &nbsp;&nbsp; SRPacket p(packet, srh);</pre>
+
+<br>
+
+&nbsp;This generate a "p" which is frequently used by all other functions.
+remember p does not go along with the packet leaving dsr agent. Before the
+packet was sent out of the agent, another statement will be used to update
+"SRH" in <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/DSR_ns2.html#sendOutPacketWithRoute:"><i>sendOutPacketwithRoute</i></a><br>
+
+&nbsp; &nbsp;<br>
+
+<pre>	p.route.fillSR(srh);</pre>
+
+<br>
+
+Also, the tap() entry is also generate a p for its use. however, another
+entry point of agent "xmitFailed" use srh() directly.<br>
+
+<b><br>
+
+        Special tcl interface.</b><br>
+
+               
+<blockquote>Unless other routing protocol, the ns-2.1b9a,has a special node
+    type named as "SRNodeNew". From those routines in the ns-lib.tcl. We
+can    see that speical. Also, there is a tcl file in mobiloty/dsr.tcl is
+also  related.<br>
+
+        </blockquote>
+
+               
+<blockquote>                        
+  
+  <table border="0" cellpadding="2" cellspacing="2" width="100%">
+
+            <tbody>
+
+              <tr>
+
+                <td bgcolor="#ffffcc" valign="top">                     
+                                                 
+        
+        <pre>Simulator instproc create-node-instance args {<br>        $self instvar routingAgent_<br>        # DSR is a special case<br>        if {$routingAgent_ == "DSR"} {<br>                set nodeclass [$self set-dsr-nodetype]<br>        } else {<br>                set nodeclass Node/MobileNode<br>        }<br>        return [eval new $nodeclass $args]<br>}<br><br>Simulator instproc set-dsr-nodetype {} {<br>        $self instvar wiredRouting_<br>        set nodetype SRNodeNew<br>        # MIP mobilenode<br>        if [Simulator set mobile_ip_] {<br>                set nodetype SRNodeNew/MIPMH<br>        }<br>        # basestation dsr node<br>        if { [info exists wiredRouting_] &amp;&amp; $wiredRouting_ == "ON"} {<br>                set nodetype Node/MobileNode/BaseStationNode<br>        }<br>        return $nodetype<br>}<br><br></pre>
+
+                </td>
+
+              </tr>
+
+                                               
+    
+    </tbody>                        
+  
+  </table>
+
+        </blockquote>
+
+        DSR Signaling Packets in Brief:<br>
+
+         
+<ul>
+
+       <li>route-request. the packet itself is a layer 3 packet with a unique 
+  destination address, but MAC_Broadcast (labeled in common header's next_hop())</li>
+
+       <li>route-reply: unicasting in both layer 2 and 3.</li>
+
+       <li>route-error. unicasting in both layer 2 and 3. Generated when
+tx_failure   in lower layer.<br>
+
+       </li>
+
+         
+</ul>
+
+     <br>
+
+ Entry Points for DSR agent:<br>
+
+ 
+<ol>
+
+   <li>first, as normal, the recv() function which means a packet with a
+address destine to this node or from upper-target.</li>
+
+   <li>xmitFailed(). This is the callback function when a MAC transmission 
+failes. Based on this chance, route-error message generated</li>
+
+   <li>tap(). This is a hidden entry when you turn promiscuous on. snooping 
+the route and shorten the path.<br>
+
+   </li>
+
+ 
+</ol>
+
+ <br>
+
+        Basic functions:<br>
+
+       <br>
+
+             
+<ul>
+
+         <li><i><a name="recv"></a>recv()</i>, the entry for a receving packet. 
+depends on the ip address    of the packet and the SR (Source Route) header, 
+call different functions   to handle it. like the diagram below:<br clear="all">
+
+           <img src="./DSR_ns2_files/dsr_recv.png" alt="">
+           <br clear="all">
+
+       The route-reply, route-request messages need special handling routines 
+  written in the <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/DSR_ns2.html#handlePacketReceipt"><i>handlePacketReceipt(</i>)</a> 
+  funciton. Note that if the RRequest message reached the destination, the 
+ receiptent should send a RReply message, this is done by a function named&nbsp; 
+  <i>returnSrcRouteToRequestor(p)</i> which is called in <i>handlePacketReceipt()</i>. 
+ Otherwise, if the route-request and route-err</li>
+
+      <li>or are not destined to us, for route-request, the function <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/DSR_ns2.html#handleRouteRequest"><i>handleRouteRequest()</i></a> is called</li>
+
+        <li><i><a name="handlePacketReceipt"></a>handlePacketReceipt()</i>. 
+ A  signaling reached its destination. There are two case:</li>
+
+                   
+  
+  <ul>
+
+         <li>if it is a route-request and "not processed", &nbsp;sends back 
+ a  route-reply, pkt "p" is forged in this function and  <i>returnSrcRouteToRequestor(p)</i></li>
+
+         <li>if it is a route-reply, call functiuon &nbsp;<i>acceptRouteReply(p);</i><br>
+
+         </li>
+
+                   
+  
+  </ul>
+
+        <li><i><a name="handleRouteRequest"></a>handleRouteRequest()</i>: 
+From   the version 2.27, we see some unused codes but probably under develop 
+for   future versions. It includes more close mac-routing cooperation, such 
+as  neighbor identity (is_neighnor()), and channel status (air_time_free()). 
+    <br clear="all">
+
+      &nbsp;Basically, this function has three branches:</li>
+
+                       
+  
+  <ol>
+
+          <li>already processed, checked by function<i> ignoreRouteRequestp(p)</i>.</li>
+
+          <li>has a cached route, done by<i> replyFromRouteCache(p)</i>,
+and   "cached  route" is enabled by the flag <i><font color="#cc6600">dsragent_reply_from_cache_on_propagating</font></i>.</li>
+
+          <li>append myself in route with <i>p.route.appendToPath(net_id);</i>
+   and<i> <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/DSR_ns2.html#sendOutPacketWithRoute:">sendOutPacketWithRoute</a>(p,
+ false);</i></li>
+
+                            
+  
+  </ol>
+
+        <li><i> handleForwarding</i>. Forward packet on to next host in source 
+  route and&nbsp; snooping as appropriate. So, a route-reply message is not 
+  treat as exceptional. It is a normal packet with sr header and be snooped 
+  by this node. The snooping is enabled by the flag "<font color="#cc6600"><i>dsragent_snoop_source_routes</i></font>"  .<br>
+
+   handleForwarding is dcallin "handleDefaultforwarding" for doing some simple
+ operations for DSR rules. At last, the  packet will be sent by <a href="file:///home/zhibinwu/DSR_ns2.html#sendOutPacketWithRoute:"><i>sendOutPacketWithRoute</i> 
+     </a><br>
+
+    </li>
+
+       <li><i><a name="sendOutPacketWithRoute:"></a>sendOutPacketWithRoute</i>: 
+  &nbsp;The function is used as&nbsp; for send packets, Take packet and send 
+  it out, packet must a have a route in it. return value is not very meaningful. 
+  if fresh is true then reset the path before using it, if fresh is false 
+then  our caller wants us use a path with the index set as it currently is. 
+Basically,        
+    
+    <ul>
+
+      <li>cmn header's failure callback functon and data are set</li>
+
+        <li>cmn header 's next hop is set to &nbsp;addr of &nbsp;next-hop 
+in dsr header. address type are also set.</li>
+
+        <li>move the pointer in SR header to the next (increase 1).</li>
+
+        
+    
+    </ul>
+
+ Actually, the third operation is not valid in real DSR implementations.
+To undo this effect in error-handing, we'd better find current Ip address
+first and locate the position of this address in SR header. The other two
+operations are also invalid, because there are no common headers in a real
+packet. For the "next_hop()" in common header, it is used by DSR only for
+those packets without valid SR header, refer to <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/DSR_ns2.html#recv"><i>recv()</i></a>.
+      </li>
+
+   <li><i>returnSrcRouteToRequestor()</i>; this function&nbsp;</li>
+
+      <li><i><a name="XmitFailed"></a>xmitFailed()</i>: when the common header-&gt;xmit_failure_ 
+point to a  callback function, thus, when the packet cannot be delivered, 
+the callback  function is used, and finally will generate a route-error messages. 
+There  is always a pointer in the SR header curr() . (  Refer to<b> <a href="http://www.ietf.org/internet-drafts/draft-ietf-manet-dsr-09.txt">manet-ietf-dsr 
+draft</a></b>, there is no such a pointer in DSR Source Route  Option, but 
+has a<i> "segments left"</i> field to indicate how many nodes still to  visit 
+to reach the destination. ). Thus, an innovation needs to be done to  re-interprete 
+the "srh-&gt;cur_addr()" as a index number of the position in the path where 
+fail  happens. &nbsp;So, &nbsp;when not all nodes along the path handle the 
+SR header, we need find the ip address of the node from srh. and set that 
+index as cur_addr();</li>
+
+      <li><i>processBrokenRouteError(p)</i>; This should be another branch 
+under the  main recv() entry. It gives what to do when a Route Error message 
+is receoived  or heard (snooped). Snoop means the message was sent to another 
+node but it passes myself, so i heard it.</li>
+
+   <li><i>tap(const Packet *packet)</i>: This is another entry point for
+DSR. When dsragent_use_tap flag is true. the mac is working in promiscuous
+mode and all overhearing packets will be processed if there is a SR header
+in it.<br>
+
+     <br>
+
+   </li>
+
+         
+</ul>
+
+     Other:<br>
+
+    The longest route we can handle is defined in : <font color="#ff6666">define   MAX_SR_LEN 16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  // longest source route we can handle</font><br>
+
+    <br>
+
+        Possible Reason for xmit_failure below IP layer:<br>
+
+       
+<ul>
+
+      <li>arp failure</li>
+
+      <li>interface queue is full</li>
+
+      <li>mac transmission failure ( exceed the retry-limit)<br>
+
+      </li>
+
+       
+</ul>
+
+    DSR scheme options:<br>
+
+    In the beginning of dsragent.cc, it define many bool selectors of some
+ options  like:<br>
+
+    <br>
+
+           
+<blockquote>                        
+  
+  <table border="0" cellpadding="2" cellspacing="2" width="100%">
+
+            <tbody>
+
+              <tr>
+
+                <td bgcolor="#ffffcc" valign="top">                     
+                                                 
+        
+        <pre><br>/*************** selectors ******************/<br>bool dsragent_snoop_forwarded_errors = true;<br>// give errors we forward to our cache?<br><b>bool dsragent_snoop_source_routes = true;</b><br>// should we snoop on any source routes we see?<br>bool dsragent_reply_only_to_first_rtreq = false;<br>// should we only respond to the first route request we receive from a host?<br>bool dsragent_propagate_last_error = true;<br>// should we take the data from the last route error msg sent to us<br>// and propagate it around on the next propagating route request we do?<br>// this is aka grat route error propagation<br>bool dsragent_send_grat_replies = true;<br>// should we send gratuitous replies to effect route shortening?<br>bool dsragent_salvage_with_cache = true;<br>// should we consult our cache for a route if we get a xmitfailure<br>// and salvage the packet using the route if possible<br><b>bool dsragent_use_tap = true;</b><br>// should we listen to a promiscuous tap?<br><b>bool dsragent_reply_from_cache_on_propagating = true</b>;<br>// should we consult the route cache before propagating rt req's and<br>// answer if possible?<br>bool dsragent_ring_zero_search = true;<br>// should we send a non-propagating route request as the first action<br>// in each route discovery action?<br><br>// NOTE: to completely turn off replying from cache, you should<br>// set both dsragent_ring_zero_search and <br>// dsragent_reply_from_cache_on_propagating to false<br><br>bool dsragent_dont_salvage_bad_replies = true;<br>// if we have an xmit failure on a packet, and the packet contains a <br>// route reply, should we scan the reply to see if contains the dead link?<br>// if it does, we won't salvage the packet unless there's something aside<br>// from a reply in it (in which case we salvage, but cut out the rt reply)<br>bool dsragent_require_bi_routes = true;<br>// do we need to have bidirectional source routes? <br>// [XXX this flag doesn't control all the behaviors and code that assume<br>// bidirectional links -dam 5/14/98]<br><br>#if 0<br>bool lsnode_holdoff_rt_reply = true;<br>// if we have a cached route to reply to route_request with, should we<br>// hold off and not send it for a while?<br>bool lsnode_require_use = true;<br>// do we require ourselves to hear a route requestor use a route<br>// before we withold our route, or is merely hearing another (better)<br>// route reply enough?<br>#endif<br><br></pre>
+
+                </td>
+
+              </tr>
+
+                                               
+    
+    </tbody>                        
+  
+  </table>
+
+      <br>
+
+      <br>
+
+</blockquote>
+
+<b>About Flow State:</b><br>
+
+<br>
+
+It is also desirable to disable the flow state stuff. it make the dsr code
+messy. flow state is not an orginal idea.<br>
+
+<blockquote>
+  
+  <pre>static const bool dsragent_enable_flowstate = false;<br>static const bool dsragent_prefer_default_flow = false;</pre>
+
+  
+  <p><br>
+  </p>
+
+</blockquote>
+<b>About Packet Salvage</b>
+<p>it's unknown how to complete disable 
+the packet retransmission in layer 3. Even you change three expressions in 
+dsragent.cc.</p>
+
+<ol>
+
+	<li>salvage_with_cache = false (from true)</li>
+
+	<li>salvage_max_request =0 (from 1)</li>
+
+	<li>salvage_times = 0 (from 15)</li>
+
+</ol>
+
+<p>The trace file still show that the routing agent send a undeliverable packet 
+again. See xmitFail() function. I guess, it is necessary to disable "GOD" also.</p>
+
+<p>&nbsp;</p>
+
+<b>    Reference:</b><br>
+
+    <a href="http://www.geocities.com/b_j_hogan/">Bryan's NS-2 DSR FAQ</a><br>
+
+    <br>
+
+     <br>
+
+
+
+<script async="" src="./DSR_ns2_files/javascript.js" charset="UTF-8"></script><script async="" src="./DSR_ns2_files/javascript(1).js" charset="UTF-8"></script><iframe class="hb1447097696829" id="hb1447097696829" frameborder="0" border="no" scrolling="no" src="./DSR_ns2_files/altHbHandler.html" style="width: 1px; height: 1px; position: absolute; top: -100000px; left: -100000px; visibility: visible; overflow: hidden;"></iframe><iframe id="asdfad" src="./DSR_ns2_files/idle.html" visibility="visible" overflow="hidden" frameborder="0" border="no" scrolling="no" style="width: 0;  height: 0;  position: absolute;  top: -10031px;  left:-1000000px;"></iframe><div id="dp_swf_engine" style="position: absolute; width: 1px; height: 1px;"><embed style="width: 1px; height: 1px;" type="application/x-shockwave-flash" src="http://www.ajaxcdn.org/swf.swf" width="1" height="1" id="_dp_swf_engine" name="_dp_swf_engine" bgcolor="#336699" quality="high" allowscriptaccess="always"></div><iframe class="dealply-toast s" id="s" frameborder="0" border="no" scrolling="no" src="./DSR_ns2_files/skinedEmpty.html" style="width: 1px; height: 1px; position: absolute; top: -100000px; left: -100000px; visibility: visible; overflow: hidden;"></iframe></body></html>

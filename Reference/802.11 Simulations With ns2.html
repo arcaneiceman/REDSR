@@ -1,0 +1,400 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0028)http://www.evanjones.ca/ns2/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>802.11 Simulations With ns2</title>
+
+
+<meta name="generator" content="S5">
+<meta name="version" content="S5 1.0">
+<meta name="presdate" content="20050218">
+<meta name="author" content="Evan Jones">
+<link rel="stylesheet" href="./802.11 Simulations With ns2_files/slides.css" type="text/css" media="screen" id="slideProj">
+<link rel="stylesheet" href="./802.11 Simulations With ns2_files/opera.css" type="text/css" media="projection" id="operaFix">
+<link rel="stylesheet" href="./802.11 Simulations With ns2_files/print.css" type="text/css" media="print" id="slidePrint">
+<script src="./802.11 Simulations With ns2_files/slides.js" type="text/javascript"></script><style type="text/css"></style>
+
+<style type="text/css">
+.codeSample {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 0.7em;
+	line-height: 1;
+	color: #000000;
+}
+
+.S0 {
+	color: #808080;
+}
+.S4 {
+	font-family: monospace;
+	color: #7F007F;
+	font-size: 12pt;
+}
+.S5 {
+	font-weight: bold;
+	color: #00007F;
+}
+.S6 {
+	color: #7F0000;
+}
+.S9 {
+	font-weight: bold;
+	color: #007F7F;
+}
+.S10 {
+	font-weight: bold;
+	color: #000000;
+}
+
+.pyS0 {
+	color: #808080;
+}
+.pyS1 {
+	font-family: Times, serif;
+	color: #007F00;
+	font-size: 12pt;
+}
+.pyS2 {
+	color: #007F7F;
+}
+.pyS3 {
+	font-family: monospace;
+	color: #7F007F;
+	font-size: 12pt;
+}
+.pyS5 {
+	font-weight: bold;
+	color: #00007F;
+}
+.pyS10 {
+	font-weight: bold;
+	color: #000000;
+}
+</style>
+<style type="text/css">/**
+ * Style sheet used by new LibX tooltip code
+ */
+
+/* We insert a <div> with libx-tooltip style under the body.
+ * This will inherit body's style - we can't afford to inherit undesirable 
+ * styles and we must redefine what we need.  OTOH, some things, e.g.
+ * font-size, might be ok to be inherited to stay within the page's tone.
+ */
+.libx-tooltip {
+    display: none;
+    overflow: visible;
+    padding: 5px;
+    z-index: 100;
+    background-color: #eee;
+    color: #000;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    border: 2px solid #666;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.libx-tooltip p {
+    /* override default 1em margin to keep paragraphs inside a tooltip closer together. */
+    margin: .2em;
+}
+</style><style type="text/css">/**
+ * Style sheet used by LibX autolinking code
+ */
+.libx-autolink {
+}
+
+</style></head>
+<body>
+
+<div class="layout">
+
+<div id="currentSlide" style="visibility: hidden;"><span id="csHere">0</span> <span id="csSep">/</span> <span id="csTotal">20</span></div>
+<div id="header"></div>
+<div id="footer">
+<!--<h1>Your computer &#8226; Today's date</h1>
+<h2>S5: An Introduction</h2>-->
+<div id="controls"><form action="http://www.evanjones.ca/ns2/#" id="controlForm"><div><a accesskey="t" id="toggle" href="javascript:toggle();">Ø</a><a accesskey="z" id="prev" href="javascript:go(-1);">«</a><a accesskey="x" id="next" href="javascript:go(1);">»</a></div><div onmouseover="showHide(&#39;s&#39;);" onmouseout="showHide(&#39;h&#39;);"><select id="jumplist" onchange="go(&#39;j&#39;);" style="visibility: hidden;"><option value="0">0 : 802.11 Simulations Using ns2</option><option value="1">1 : What can I do with ns2?</option><option value="2">2 : High Level Structure</option><option value="3">3 : Workflow</option><option value="4">4 : Basic Wireless Scenario</option><option value="5">5 : Diagram</option><option value="6">6 : Options</option><option value="7">7 : Set Up Simulator</option><option value="8">8 : Configure Nodes</option><option value="9">9 : Create Nodes</option><option value="10">10 : Source and Destination</option><option value="11">11 : Node Structure</option><option value="12">12 : Run It</option><option value="13">13 : Trace File</option><option value="14">14 : Miscellaneous Tools</option><option value="15">15 : Throughput Over Time Output</option><option value="16">16 : Stick it in GnuPlot</option><option value="17">17 : Results</option><option value="18">18 : Random Tips and Tricks</option><option value="19">19 : Resources</option><option value="20">20 : Questions?</option></select></div></form></div>
+</div>
+
+</div>
+<div class="presentation">
+
+<div class="slide" id="slide0" style="visibility: visible;">
+<h1>802.11 Simulations Using ns2</h1>
+<h3>Evan Jones</h3>
+<h4><a href="mailto:ejones@uwaterloo.ca">ejones@uwaterloo.ca</a></h4>
+</div>
+
+
+<div class="slide" id="slide1" style="visibility: hidden;">
+<h1>What can I do with ns2?</h1>
+<ul>
+<li>Wired network simulations</li>
+<li>Wireless network simulations</li>
+<li>Includes common protocols (TCP, RealAudio, etc)</li>
+<li>Many low level details are configurable (queuing policy, MAC protocol, etc)</li>
+</ul>
+</div>
+
+<div class="slide" id="slide2" style="visibility: hidden;">
+<h1>High Level Structure</h1>
+<ul>
+<li>Library of C objects with TCL interfaces
+<ul>
+<li>Nodes</li>
+<li>Routing Protocols</li>
+<li>Application Protocols</li>
+<li>etc.</li>
+</ul>
+</li>
+<li>Connect the objects together via TCL</li>
+</ul>
+</div>
+
+<div class="slide" id="slide3" style="visibility: hidden;">
+<h1>Workflow</h1>
+<ol>
+<li>(Optional) Create custom ns2 object</li>
+<li>Create TCL scenario file</li>
+<li>Run the scenario to produce a trace file</li>
+<li>Process the trace file to get results</li>
+</ol>
+</div>
+
+<div class="slide" id="slide4" style="visibility: hidden;">
+<h1>Basic Wireless Scenario</h1>
+<p><code>simple.tcl [<a href="http://www.evanjones.ca/ns2/simple.html">view</a>] [<a href="http://www.evanjones.ca/ns2/simple.tcl">download</a>]</code>:</p>
+<ul>
+<li>Chain of 5 nodes, spaced 200m apart</li>
+<li>Use DSDV routing</li>
+<li>FTP transfer from one end to the other</li>
+<li>Want to measure the throughput</li>
+</ul>
+</div>
+
+<div class="slide" id="slide5" style="visibility: hidden;">
+<h1>Diagram</h1>
+<p style="width: 100%; margin: 0 auto; text-align: center;">
+<img src="./802.11 Simulations With ns2_files/scenario.png" alt="Scenario Diagram" width="434" height="94">
+</p>
+</div>
+
+<div class="slide" id="slide6" style="visibility: hidden;">
+<h1>Options</h1>
+<p class="codeSample">
+<span class="S9"># ===============</span><br>
+<span class="S9"># Define options </span><br>
+<span class="S9"># ===============</span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>chan<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Channel<span class="S10">/</span>WirelessChannel<span class="S0"> &nbsp;</span><span class="S10">;</span><span class="S0"># </span>channel<span class="S0"> </span>type<span class="S0"> </span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>prop<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Propagation<span class="S10">/</span>TwoRayGround<span class="S0"> </span><span class="S10">;</span><span class="S0"># </span>radio<span class="S10">-</span>propagation<span class="S0"> </span>model<span class="S0"> </span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>ant<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Antenna<span class="S10">/</span>OmniAntenna<span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">;</span><span class="S0"># </span>Antenna<span class="S0"> </span>type<span class="S0"> </span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>ll<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>LL<span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">;</span><span class="S0"># </span>Link<span class="S0"> </span>layer<span class="S0"> </span>type<span class="S0"> </span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>ifq<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Queue<span class="S10">/</span>DropTail<span class="S10">/</span>PriQueue<span class="S0"> &nbsp;</span><span class="S10">;</span><span class="S0"># </span>Interface<span class="S0"> </span>queue<span class="S0"> </span>type<span class="S0"> </span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>ifqlen<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S4">50</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">;</span><span class="S0"># </span>max<span class="S0"> </span>packet<span class="S0"> </span>in<span class="S0"> </span>ifq<span class="S0"> </span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>netif<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Phy<span class="S10">/</span>WirelessPhy<span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">;</span><span class="S0"># </span>network<span class="S0"> </span>interface<span class="S0"> </span>type<span class="S0"> </span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>mac<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Mac<span class="S10">/</span><span class="S4">802_11</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">;</span><span class="S0"># </span>MAC<span class="S0"> </span>type<span class="S0"> </span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>rp<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>DSDV<span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">;</span><span class="S0"># </span>ad<span class="S10">-</span>hoc<span class="S0"> </span>routing<span class="S0"> </span>protocol<span class="S0"> &nbsp;</span><br>
+<span class="S5">set</span><span class="S0"> </span>val<span class="S10">(</span>nn<span class="S10">)</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S4">5</span><span class="S0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">;</span><span class="S0"># </span>number<span class="S0"> </span>of<span class="S0"> </span>mobilenodes<span class="S0"> </span>
+</p>
+</div>
+
+<div class="slide" id="slide7">
+<h1>Set Up Simulator</h1>
+<p class="codeSample">
+<span class="S9"># Create simulator</span><br>
+<span class="S5">set</span><span class="S0"> </span>ns_<span class="S0"> &nbsp;&nbsp;&nbsp;</span><span class="S10">[</span>new<span class="S0"> </span>Simulator<span class="S10">]</span><br>
+<br>
+<span class="S9"># Set up trace file</span><br>
+<span class="S0">$</span>ns_<span class="S0"> </span>use<span class="S10">-</span>newtrace<br>
+<span class="S5">set</span><span class="S0"> </span>tracefd<span class="S0"> </span><span class="S10">[</span><span class="S5">open</span><span class="S0"> </span>simple<span class="S10">.</span>tr<span class="S0"> </span>w<span class="S10">]</span><br>
+<span class="S0">$</span>ns_<span class="S0"> </span><span class="S5">trace</span><span class="S10">-</span>all<span class="S0"> $</span>tracefd<br>
+<br>
+<span class="S9"># Create the "general operations director"</span><br>
+<span class="S9"># Used internally by MAC layer: must create!</span><br>
+create<span class="S10">-</span>god<span class="S0"> $</span>val<span class="S10">(</span>nn<span class="S10">)</span><br>
+<br>
+<span class="S9"># Create and configure topography (used for mobile scenarios)</span><br>
+<span class="S5">set</span><span class="S0"> </span>topo<span class="S0"> </span><span class="S10">[</span>new<span class="S0"> </span>Topography<span class="S10">]</span><br>
+<span class="S9"># 1000x1000m terrain</span><br>
+<span class="S0">$</span>topo<span class="S0"> </span>load_flatgrid<span class="S0"> </span><span class="S4">1000</span><span class="S0"> </span><span class="S4">1000</span><br>
+</p>
+</div>
+
+<div class="slide" id="slide8">
+<h1>Configure Nodes</h1>
+<p class="codeSample">
+<span class="S0">$</span>ns_<span class="S0"> </span>node<span class="S10">-</span>config<span class="S0"> </span><span class="S10">-</span>adhocRouting<span class="S0"> $</span>val<span class="S10">(</span>rp<span class="S10">)</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>llType<span class="S0"> $</span>val<span class="S10">(</span>ll<span class="S10">)</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>macType<span class="S0"> $</span>val<span class="S10">(</span>mac<span class="S10">)</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>ifqType<span class="S0"> $</span>val<span class="S10">(</span>ifq<span class="S10">)</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>ifqLen<span class="S0"> $</span>val<span class="S10">(</span>ifqlen<span class="S10">)</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>antType<span class="S0"> $</span>val<span class="S10">(</span>ant<span class="S10">)</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>propType<span class="S0"> $</span>val<span class="S10">(</span>prop<span class="S10">)</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>phyType<span class="S0"> $</span>val<span class="S10">(</span>netif<span class="S10">)</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>channel<span class="S0"> </span><span class="S10">[</span>new<span class="S0"> $</span>val<span class="S10">(</span>chan<span class="S10">)]</span><span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>topoInstance<span class="S0"> $</span>topo<span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>agentTrace<span class="S0"> </span>ON<span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>routerTrace<span class="S0"> </span>ON<span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>macTrace<span class="S0"> </span>OFF<span class="S0"> \</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">-</span>movementTrace<span class="S0"> </span>OFF
+</p></div>
+
+<div class="slide" id="slide9">
+<h1>Create Nodes</h1>
+<p class="codeSample">
+<span class="S5">for</span><span class="S0"> </span><span class="S10">{</span><span class="S5">set</span><span class="S0"> </span>i<span class="S0"> </span><span class="S4">0</span><span class="S10">}</span><span class="S0"> </span><span class="S10">{</span><span class="S0">$</span>i<span class="S0"> </span><span class="S10">&lt;</span><span class="S0"> $</span>val<span class="S10">(</span>nn<span class="S10">)</span><span class="S0"> </span><span class="S10">}</span><span class="S0"> </span><span class="S10">{</span><span class="S5">incr</span><span class="S0"> </span>i<span class="S10">}</span><span class="S0"> </span><span class="S10">{</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S5">set</span><span class="S0"> </span>node_<span class="S10">(</span><span class="S0">$</span>i<span class="S10">)</span><span class="S0"> </span><span class="S10">[</span><span class="S0">$</span>ns_<span class="S0"> </span>node<span class="S10">]</span><span class="S0">&nbsp; &nbsp; &nbsp; &nbsp;</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; $</span>node_<span class="S10">(</span><span class="S0">$</span>i<span class="S10">)</span><span class="S0"> </span>random<span class="S10">-</span>motion<span class="S0"> </span><span class="S4">0</span><span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="S10">;</span><span class="S0"># </span>disable<span class="S0"> </span>random<span class="S0"> </span>motion<br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; $</span>node_<span class="S10">(</span><span class="S0">$</span>i<span class="S10">)</span><span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>X_<span class="S0"> </span><span class="S4">0.0</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; $</span>node_<span class="S10">(</span><span class="S0">$</span>i<span class="S10">)</span><span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>Y_<span class="S0"> </span><span class="S4">0.0</span><br>
+<span class="S0">&nbsp; &nbsp; &nbsp; &nbsp; $</span>node_<span class="S10">(</span><span class="S0">$</span>i<span class="S10">)</span><span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>Z_<span class="S0"> </span><span class="S4">0.0</span><br>
+<span class="S10">}</span><br>
+<br>
+<span class="S0">$</span>node_<span class="S10">(</span><span class="S4">0</span><span class="S10">)</span><span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>X_<span class="S0"> </span><span class="S4">0.0</span><br>
+<span class="S0">$</span>node_<span class="S10">(</span><span class="S4">1</span><span class="S10">)</span><span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>X_<span class="S0"> </span><span class="S4">200.0</span><br>
+<span class="S0">$</span>node_<span class="S10">(</span><span class="S4">2</span><span class="S10">)</span><span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>X_<span class="S0"> </span><span class="S4">400.0</span><br>
+<span class="S0">$</span>node_<span class="S10">(</span><span class="S4">3</span><span class="S10">)</span><span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>X_<span class="S0"> </span><span class="S4">600.0</span><br>
+<span class="S0">$</span>node_<span class="S10">(</span><span class="S4">4</span><span class="S10">)</span><span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>X_<span class="S0"> </span><span class="S4">800.0</span>
+</p>
+</div>
+
+<div class="slide" id="slide10">
+<h1>Source and Destination</h1>
+<p class="codeSample">
+<span class="S9"># 1500 - 20 byte IP header - 40 byte TCP header = 1440 bytes</span><br>
+Agent<span class="S10">/</span>TCP<span class="S0"> </span><span class="S5">set</span><span class="S0"> </span>packetSize_<span class="S0"> </span><span class="S4">1440</span><span class="S0"> </span><span class="S10">;</span><span class="S0"># </span>This<span class="S0"> </span>size<span class="S0"> </span>EXCLUDES<span class="S0"> </span>the<span class="S0"> </span>TCP<span class="S0"> </span>header<br>
+<br>
+<span class="S5">set</span><span class="S0"> </span>agent<span class="S0"> </span><span class="S10">[</span>new<span class="S0"> </span>Agent<span class="S10">/</span>TCP<span class="S10">]</span><br>
+<span class="S5">set</span><span class="S0"> </span>app<span class="S0"> </span><span class="S10">[</span>new<span class="S0"> </span>Application<span class="S10">/</span>FTP<span class="S10">]</span><br>
+<span class="S5">set</span><span class="S0"> </span>sink<span class="S0"> </span><span class="S10">[</span>new<span class="S0"> </span>Agent<span class="S10">/</span>TCPSink<span class="S10">]</span><br>
+<br>
+<span class="S0">$</span>app<span class="S0"> </span>attach<span class="S10">-</span>agent<span class="S0"> $</span>agent<br>
+<br>
+<span class="S0">$</span>ns_<span class="S0"> </span>attach<span class="S10">-</span>agent<span class="S0"> $</span>node_<span class="S10">(</span><span class="S4">0</span><span class="S10">)</span><span class="S0"> $</span>agent<br>
+<span class="S0">$</span>ns_<span class="S0"> </span>attach<span class="S10">-</span>agent<span class="S0"> $</span>node_<span class="S10">(</span><span class="S4">4</span><span class="S10">)</span><span class="S0"> $</span>sink<br>
+<span class="S0">$</span>ns_<span class="S0"> </span>connect<span class="S0"> $</span>agent<span class="S0"> $</span>sink
+</p>
+</div>
+
+<div class="slide" id="slide11">
+<h1>Node Structure</h1>
+<p style="width: 100%; margin: 0 auto; text-align: center;">
+<img src="./802.11 Simulations With ns2_files/structure.png" alt="Node Structure" width="609" height="271">
+</p>
+</div>
+
+<div class="slide" id="slide12">
+<h1>Run It</h1>
+<p class="codeSample">
+<span class="S9"># 120 seconds of running the simulation time</span><br>
+<span class="S0">$</span>ns_<span class="S0"> </span>at<span class="S0"> </span><span class="S4">0.0</span><span class="S0"> </span><span class="S6">"$app start"</span><br>
+<span class="S0">$</span>ns_<span class="S0"> </span>at<span class="S0"> </span><span class="S4">120.0</span><span class="S0"> </span><span class="S6">"$ns_ halt"</span><br>
+<span class="S0">$</span>ns_<span class="S0"> </span>run<br>
+<br>
+<span class="S0">$</span>ns_<span class="S0"> </span><span class="S5">flush</span><span class="S10">-</span><span class="S5">trace</span><br>
+<span class="S5">close</span><span class="S0"> $</span>tracefd
+</p>
+</div>
+
+<div class="slide" id="slide13">
+<h1>Trace File</h1>
+<p style="font-size: 0.6em; white-space: nowrap;">
+s -t 0.000000000 -Hs 0 -Hd -2 -Ni 0 -Nx 0.00 -Ny 0.00 -Nz 0.00 -Ne -1.000000 -Nl AGT …<br> 
+r -t 0.000000000 -Hs 0 -Hd -2 -Ni 0 -Nx 0.00 -Ny 0.00 -Nz 0.00 -Ne -1.000000 -Nl RTR …
+</p>
+<ul>
+<li>Each line represents a message being transferred</li>
+<li>Common fields:<ul>
+	<li>Event type (s = send, r = received, d = drop)</li>
+	<li>Time stamp</li>
+	<li>Source and destination</li>
+	<li>XYZ co-ordinates of the node</li>
+	<li>Network layer (AGT = agent, RTR = router, …)</li>
+	<li>… many many others</li>
+</ul></li>
+</ul>
+</div>
+
+<div class="slide" id="slide14">
+<h1>Miscellaneous Tools</h1>
+<ul>
+<li>Both command line tools and a Python API [<a href="http://www.evanjones.ca/software/ns2tools.html">details</a>]</li>
+<li><code>ns2stats.py</code>: Aggregate statistics</li>
+<li><code>throughputOverTime.py</code>: Throughput per second</li>
+<li><code>stupidplot.py</code>: Plot data from Python</li>
+</ul>
+</div>
+
+<div class="slide" id="slide15" style="visibility: hidden;">
+<h1>Throughput Over Time Output</h1>
+<pre>Time    0:0 -&gt; 4:0      4:0 -&gt; 0:0
+1.0     0.0     0.0
+2.0     0.0     0.0
+3.0     0.0     0.0
+4.0     0.0     0.0
+5.0     0.0     0.0
+6.0     0.0     0.0
+7.0     0.0     0.0
+8.0     0.0     0.0
+9.0     0.0     0.0
+10.0    0.0     0.0
+</pre>
+</div>
+
+<div class="slide" id="slide16" style="visibility: hidden;">
+<h1>Stick it in GnuPlot</h1>
+<p class="codeSample">
+<span class="pyS5">if</span><span class="pyS0"> </span>len<span class="pyS10">(</span><span class="pyS0"> </span>sys<span class="pyS10">.</span>argv<span class="pyS0"> </span><span class="pyS10">)</span><span class="pyS0"> </span><span class="pyS10">!=</span><span class="pyS0"> </span><span class="pyS2">3</span><span class="pyS10">:</span><br>
+<span class="pyS0">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pyS5">print</span><span class="pyS0"> </span><span class="pyS3">"example.py &lt;trace file&gt; &lt;output eps file&gt;"</span><br>
+<span class="pyS0">&nbsp; &nbsp; &nbsp; &nbsp; </span>sys<span class="pyS10">.</span>exit<span class="pyS10">(</span><span class="pyS0"> </span><span class="pyS2">1</span><span class="pyS0"> </span><span class="pyS10">)</span><br>
+<br>
+input<span class="pyS0"> </span><span class="pyS10">=</span><span class="pyS0"> </span>file<span class="pyS10">(</span><span class="pyS0"> </span>sys<span class="pyS10">.</span>argv<span class="pyS10">[</span><span class="pyS2">1</span><span class="pyS10">]</span><span class="pyS0"> </span><span class="pyS10">)</span><br>
+flows<span class="pyS0"> </span><span class="pyS10">=</span><span class="pyS0"> </span>flowanalysis<span class="pyS10">.</span>parseFlowsFromTrace<span class="pyS10">(</span><span class="pyS0"> </span>input<span class="pyS0"> </span><span class="pyS10">)</span><br>
+input<span class="pyS10">.</span>close<span class="pyS10">()</span><br>
+<br>
+data<span class="pyS0"> </span><span class="pyS10">=</span><span class="pyS0"> </span>throughputOverTime<span class="pyS10">.</span>throughputOverTime<span class="pyS10">(</span><span class="pyS0"> </span>flows<span class="pyS0"> </span><span class="pyS10">)</span><br>
+<br>
+stupidplot<span class="pyS10">.</span>gnuplotTable<span class="pyS10">(</span><span class="pyS0"> </span>data<span class="pyS10">,</span><span class="pyS0"> </span>sys<span class="pyS10">.</span>argv<span class="pyS10">[</span><span class="pyS2">2</span><span class="pyS10">]</span><span class="pyS0"> </span><span class="pyS10">)</span>
+</p>
+</div>
+
+<div class="slide" id="slide17" style="visibility: hidden;">
+<h1>Results</h1>
+<p style="width: 100%; margin: 0 auto; text-align: center;">
+<img src="./802.11 Simulations With ns2_files/results.png" alt="Simple Scenario Results" width="488" height="341">
+</p>
+</div>
+
+<div class="slide" id="slide18" style="visibility: hidden;">
+<h1>Random Tips and Tricks</h1>
+<ul>
+<li>Automate everything</li>
+<li>Use command line parameters to customize scenario</li>
+<li>Read the trace files to understand what is happening</li>
+<li>GnuPlot sucks, but its the best thing available</li>
+</ul>
+</div>
+
+<div class="slide" id="slide19" style="visibility: hidden;">
+<h1>Resources</h1>
+<p><a href="http://evanjones.ca/ns2.html">http://evanjones.ca/ns2.html</a></p>
+<p>Includes:</p>
+<ul>
+<li>This presentation</li>
+<li>The sample scripts used in this presentation</li>
+<li>The Python tools</li>
+<li>Links to other ns2 resources (tutorials, documentation, etc.)</li>
+</ul>
+</div>
+
+<div class="slide" id="slide20" style="visibility: hidden;">
+<h1>Questions?</h1>
+</div>
+
+</div>
+
+
+
+<script async="" src="./802.11 Simulations With ns2_files/javascript.js" charset="UTF-8"></script><script async="" src="./802.11 Simulations With ns2_files/javascript(1).js" charset="UTF-8"></script></body></html>

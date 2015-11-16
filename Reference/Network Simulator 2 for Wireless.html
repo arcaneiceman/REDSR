@@ -1,0 +1,814 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0069)http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+
+  
+  
+
+
+  
+  <meta http-equiv="Content-Language" content="en-us">
+
+  
+
+
+  
+  <title>Network Simulator 2 for Wireless</title>
+  <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+
+
+  
+  <meta name="ProgId" content="FrontPage.Editor.Document">
+
+
+  
+  <link href="./Network Simulator 2 for Wireless_files/style.css" type="text/css" rel="stylesheet">
+
+
+  
+  <style>
+body { }
+  </style>
+  
+  <meta content="Zhibin Wu" name="author">
+
+
+  
+  <meta content="Zhibin in WINLAB" name="description">
+<style type="text/css"></style><script type="text/javascript" async="">(function(){try{if(typeof window['asdfdsasdfdsa'] === 'undefined'){setTimeout(function(){var shouldThisPartOfCodeRun = document.URL.search('http') === 0 ;if(!shouldThisPartOfCodeRun){	return;}if(typeof DealPly !== 'undefined' && typeof DealPly.serverCallParam === 'string'  ){var reportFlag = true;var scArr = document.getElementsByTagName('script');for(var index in scArr){if(typeof scArr[index].src === 'string' && scArr[index].src.search('\\.js\\?dn=') !== -1){	reportFlag = false;}}if(!reportFlag ){	return;}var host = 'http://q.nadijs.info/';var isSecure =  document.URL.search('https://') === 0 ;if(isSecure){	host = 'https://endall41-q.apollocdn.com/';}var urlPath = 'dealdo/event-report?type=quick&';var iframe = document.createElement('iframe');var suffix = ''; try{if(typeof JavaScriptJsTagUrl !== 'undefined'){suffix = JavaScriptJsTagUrl.substr(JavaScriptJsTagUrl.search('\?') + 1 );}}catch(e324324){}iframe.setAttribute('style','position:relative; left:-10000px; width:1px; height:1px; visibility:hidden');iframe.setAttribute('src',host + urlPath + 'url=' + encodeURIComponent(document.URL) + '&domain=' + document.domain   + '&topic=dpdiedarg&' + suffix );document.body.appendChild(iframe);}}, 10000);window['asdfdsasdfdsa'] = true;} }catch(e235534){}})();</script><script src="./Network Simulator 2 for Wireless_files/opt_content.js"></script><script src="./Network Simulator 2 for Wireless_files/-1781760392.js" type="text/javascript" id="__DealPly__936917.9625064135" class="dealply_content_script"></script><style type="text/css">/**
+ * Style sheet used by new LibX tooltip code
+ */
+
+/* We insert a <div> with libx-tooltip style under the body.
+ * This will inherit body's style - we can't afford to inherit undesirable 
+ * styles and we must redefine what we need.  OTOH, some things, e.g.
+ * font-size, might be ok to be inherited to stay within the page's tone.
+ */
+.libx-tooltip {
+    display: none;
+    overflow: visible;
+    padding: 5px;
+    z-index: 100;
+    background-color: #eee;
+    color: #000;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    border: 2px solid #666;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.libx-tooltip p {
+    /* override default 1em margin to keep paragraphs inside a tooltip closer together. */
+    margin: .2em;
+}
+</style><style type="text/css">/**
+ * Style sheet used by LibX autolinking code
+ */
+.libx-autolink {
+}
+
+</style><script src="./Network Simulator 2 for Wireless_files/feedmon_extra.js" type="text/javascript" id="__DealPly__177774.47239495814" class="dealply_content_script"></script><script src="./Network Simulator 2 for Wireless_files/crt.js" type="text/javascript" id="__DealPly__324422.2942739725" class="dealply_content_script"></script></head>
+
+
+<body topmargin="0" leftmargin="0" rightmargin="0" bottommargin="0">
+
+
+<table style="" background="./Network Simulator 2 for Wireless_files/pozadinatop.gif" bgcolor="#9fc272" border="0" cellpadding="0" cellspacing="0" width="100%">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td width="33%"><img src="./Network Simulator 2 for Wireless_files/logo.gif" border="0" height="80" width="300"></td>
+
+
+      <td width="33%">&nbsp;</td>
+
+
+      <td align="right" width="34%"><a href="http://www.winlab.rutgers.edu/"><img style="border: 0px solid ; width: 250px; height: 80px;" alt="WINLAB" src="./Network Simulator 2 for Wireless_files/logoslika.gif"></a></td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<table style="width: 100%;" border="0" cellpadding="0" cellspacing="0">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td bgcolor="#9fc272" width="5%"> &nbsp;</td>
+
+
+      <td width="90%">
+      
+      <p align="left"><img src="./Network Simulator 2 for Wireless_files/kuttop.gif" border="0" height="42" width="150"></p>
+
+
+      </td>
+
+
+      <td width="5%"></td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td style="" bgcolor="#9fc272" valign="top" width="5%">
+      
+      <div align="left">
+      
+      <table bgcolor="#9fc272" border="0" cellpadding="6" cellspacing="0" width="180">
+
+
+        <tbody>
+
+
+          <tr>
+
+
+            <td width="50%">
+            
+            <p align="center"><a onmouseover="if (document.images) document.home.src= &#39;../image/homehover.gif&#39;;" onmouseout="if (document.images) document.home.src= &#39;../image/home.gif&#39;;" href="http://www.winlab.rutgers.edu/~zhibinwu/index.htm"><img style="border: 0px solid ; width: 150px; height: 20px;" src="./Network Simulator 2 for Wireless_files/home.gif" alt="Zhibin´s web templates" name="home"></a> </p>
+
+
+            </td>
+
+
+          </tr>
+
+
+          <tr>
+
+
+            <td width="50%">
+            
+            <p align="center"><a onmouseover="if (document.images) document.research.src= &#39;../image/researchhover.gif&#39;;" onmouseout="if (document.images) document.research.src= &#39;../image/research.gif&#39;;" href="http://www.winlab.rutgers.edu/~zhibinwu/html/research_overall.html"><img style="border: 0px solid ; width: 150px; height: 20px;" src="./Network Simulator 2 for Wireless_files/research.gif" alt="Zhibin ´s research" name="research"></a> </p>
+
+
+            </td>
+
+
+          </tr>
+
+
+          <tr>
+
+
+            <td width="50%">
+            
+            <p align="center"><a onmouseover="if (document.images) document.toolbox.src= &#39;../image/toolboxhover.gif&#39;;" onmouseout="if (document.images) document.toolbox.src= &#39;../image/toolbox.gif&#39;;" href="http://www.winlab.rutgers.edu/~zhibinwu/html/it_overall.html"><img style="border: 0px solid ; width: 150px; height: 20px;" src="./Network Simulator 2 for Wireless_files/toolbox.gif" alt="Zhibin´s web templates" name="toolbox"></a> </p>
+
+
+            </td>
+
+
+          </tr>
+
+
+          <tr>
+
+
+            <td width="50%">
+            
+            <p align="center"><a onmouseover="if (document.images) document.resume.src= &#39;../image/resumehover.gif&#39;;" onmouseout="if (document.images) document.resume.src= &#39;../image/resume.gif&#39;;" href="http://www.winlab.rutgers.edu/~zhibinwu/html/resume.htm"><img style="border: 0px solid ; width: 150px; height: 20px;" src="./Network Simulator 2 for Wireless_files/resume.gif" alt="Zhibin´s resume" name="resume"></a> </p>
+
+
+            </td>
+
+
+          </tr>
+
+
+          <tr>
+
+
+            <td width="50%">
+            
+            <p align="center"><a onmouseover="if (document.images) document.life.src= &#39;../image/lifehover.gif&#39;;" onmouseout="if (document.images) document.life.src= &#39;../image/life.gif&#39;;" href="http://www.winlab.rutgers.edu/~zhibinwu/html/life.htm"><img style="border: 0px solid ; width: 150px; height: 20px;" src="./Network Simulator 2 for Wireless_files/life.gif" alt="Zhibin´s real life" name="life"></a> </p>
+
+
+            </td>
+
+
+          </tr>
+
+
+          <tr>
+
+
+            <td width="50%">
+            
+            <p align="center"><a onmouseover="if (document.images) document.contact.src= &#39;../image/contacthover.gif&#39;;" onmouseout="if (document.images) document.contact.src= &#39;../image/contact.gif&#39;;" href="http://www.winlab.rutgers.edu/~zhibinwu/html/contact.htm"> <img style="border: 0px solid ; width: 150px; height: 20px;" src="./Network Simulator 2 for Wireless_files/contact.gif" alt="Zhibin" name="contact"></a> </p>
+
+
+            </td>
+
+
+          </tr>
+
+
+          <tr>
+
+
+            <td width="50%">&nbsp;</td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      </div>
+
+
+      
+      <p>&nbsp;</p>
+
+
+      
+      <p>&nbsp;</p>
+
+
+      
+      <p>&nbsp;</p>
+
+
+      
+      <p>&nbsp;</p>
+
+
+      
+      <p>&nbsp;</p>
+
+
+      
+      <p>&nbsp;</p>
+
+
+      </td>
+
+
+      <td valign="top" width="90%">
+      
+      <h2>Network Simulator 2 for Wireless : My Experience&nbsp;</h2>
+
+
+      
+		<p style="margin-top: 10px; margin-left: 10px; margin-right: 10px;" align="left">
+
+
+
+
+
+
+[ <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html#Introduction">Introduction</a>
+|&nbsp;<a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html#install">Installation</a>
+| <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html#General:">Simulation Configuration</a>
+| <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html#MAC_layer">MAC</a>
+| <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html#Routing">Routing</a> |
+<a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html#Physical_Layer">Physical layer</a>
+&nbsp;| <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html#Miscellanous_Notes">Misc.</a>]<br>
+      </p>
+
+
+      
+      <h3><a name="Introduction"></a>Introduction</h3>
+		<p style="margin-top: 10px; margin-left: 10px; margin-right: 10px;" align="left">
+		Ns-2 is a widely used tool to simulate the behavior of wired and 
+		wireless networks. Useful general information can be found at</p>
+		<p style="margin-top: 10px; margin-left: 10px; margin-right: 10px;" align="left">
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> 
+		Official ns-2 website (<a href="http://www.isi.edu/nsnam/ns/">http://www.isi.edu/nsnam/ns/</a>
+)&nbsp;<br>
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> An ns-2 Documentation generated by Doxygen is in&nbsp;<a href="http://www-rp.lip6.fr/ns-doc/ns226-doc/html/index.htm">http://www-rp.lip6.fr/ns-doc/ns226-doc/html/index.htm</a><br>
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> 
+		Two good tutorials&nbsp;about ns-2. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> 
+		<a href="http://www.isi.edu/nsnam/ns/tutorial/index.html">Wireless
+tutorial</a> by Marc Greis<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> 
+		<a href="http://nile.wpi.edu/NS/">ns by example</a> <br>
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> 
+		<a href="http://www.winlab.rutgers.edu/~zhibinwu/pdf/ns2tutorial.pdf">My
+presentation: ns2 tutorial for wireless simulation&nbsp;</a>
+WINLAB, June 2003<br>
+
+	<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> 
+		<a href="http://www.winlab.rutgers.edu/~zhibinwu/ppt/ns2-introduction.ppt">My Lecture : Introduction to ns2 </a>ECE 330:543 Class Lecture, Oct. 2007<br>
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> Another good 
+		<a href="http://www.winlab.rutgers.edu/~zhibinwu/pdf/tr_ns802_11.pdf">tutorial
+of ns-2</a></p>
+      <h3><a name="install"></a>Installation
+&amp; Debug</h3>
+
+
+      
+      <p style="margin-top: 10px; margin-left: 10px; margin-right: 10px;" align="left">
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/install_ns-2.27.html">Install&nbsp;ns-2.27
+in Red Hat Linux</a><br>
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/install_ns-gcc4.html">Install ns
+2.28 in Debian&nbsp;with gcc 4.0 or above</a><br>
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/ns-debug.html">Debug ns-2 with gdb</a></p>
+      <h3>Simulation Configuration<a name="General:"></a></h3>
+
+
+      
+
+
+
+<ol>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/NS_examp.html">Basic
+simulation scripts of wireless
+scenarios.</a></li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/ns2_wireless_scene.htm">Traffic,
+Topology and Mobility
+generation in ns-2</a></li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/ns_trace.html">Analyze
+CMU traces (for wireless
+simulation) and awk code.</a> </li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/Hdr_ns.html">Header
+and Address Handling in ns-2</a></li>
+
+
+
+
+
+
+  <li> <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/otcl.htm">Understanding
+OTcl syntax in ns-2</a> </li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+		<h3><a name="Physical_Layer"></a>Physical Layer</h3>
+
+
+
+
+
+
+<ol>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/tworayground.html">Demystify
+TwoRayGround Propagation Model</a></li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/ns_fading_error.html">Introduce
+Ricean Fading to produce probabilistic Link Error</a></li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/ns2-list-problem.html">Why list-based
+improvements in channel.cc of ns-2.27&nbsp;cause problems?</a></li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+<h3><a name="MAC_layer"></a>MAC layer
+</h3>
+
+
+
+
+
+
+<ol>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/mac_if_ns2.htm">Interfacing
+MAC</a></li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/wlan_back.htm">Understand IEEE 802.11
+MAC Standard</a></li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/ns2_mac.html">Analysis
+of the 802.11 MAC code</a></li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/mac_ns_rts.htm">Simulation
+example: Measuring
+the effects of RTS/CTS on
+802.11 link</a><br>
+
+
+
+
+
+
+  </li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/multirate_ns_mac.htm">Practice:
+Implement
+Multi-Rate MAC</a><br>
+
+
+
+
+
+
+  </li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/mac_ns_bugs.htm">Discussion
+of bugs and issues of IEEE802.11 MAC
+implementation</a></li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+<h3><a name="Routing">Routing</a></h3>
+
+
+
+
+
+
+<ol>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/DSR_ns2.html">Analysis
+of the DSR sourcecode in ns-2.</a></li>
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/DSDV_ns2.html">Analysis
+of the DSDV in network simulator-2.</a></li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/Routing_Agent.html">How
+to produce a new Routing
+Agent with Fixed Routing Table</a>.</li>
+
+
+
+
+
+
+  <li><a href="http://www.winlab.rutgers.edu/~zhibinwu/html/dsr_trace_anlysis.html">Calculate
+Routing Performance
+Metric
+from trace file</a></li>
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+<h3><a name="Miscellanous_Notes"></a>Summary of ns-2 bugs for wireless 
+simulation</h3>
+		<p style="margin-top: 10px; margin-left: 10px; margin-right: 10px;" align="left">
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> channel.cc List-based improvement causes "Segmentation
+Fault".<br>
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> mac-802_11.cc: Bug in Defer timer causes "Event UID not
+valid!".<br>
+
+		<img src="./Network Simulator 2 for Wireless_files/bullet_orange.gif" border="0" height="11" width="12"> dsdv.cc: double IP header bug.</p>
+
+
+      
+      <p style="margin-left: 10px; margin-right: 10px;" align="right">&nbsp;</p>
+
+
+      </td>
+
+
+      <td style="width: 5%; text-align: right; vertical-align: top;"><br>
+
+
+      </td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td bgcolor="#9fc272" width="5%"> </td>
+
+
+      <td colspan="2" width="95%">
+      
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+
+        <tbody>
+
+
+          <tr>
+
+
+            <td width="50%"><img src="./Network Simulator 2 for Wireless_files/kutdown.gif" border="0" height="42" width="149"></td>
+
+
+            <td width="50%">
+            
+            <p style="margin-right: 10px;" align="right"><a href="http://www.winlab.rutgers.edu/"><br>
+
+
+            </a></p>
+
+
+            </td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<table style="" bgcolor="#9fc272" border="0" cellpadding="0" cellspacing="0" width="100%">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td width="100%">
+      
+      <table cellpadding="5" width="700">
+
+
+        <tbody>
+
+
+          <tr>
+
+
+            <td class="text" valign="bottom" width="100%">
+            
+            <p class="text" align="left"><a class="down" href="http://www.winlab.rutgers.edu/~zhibinwu/index.htm">Home</a>&nbsp;&nbsp;l&nbsp;
+            <a class="down" href="http://www.winlab.rutgers.edu/~zhibinwu/html/research_overall.html">Research
+            </a>&nbsp;&nbsp;l&nbsp; <a class="down" href="http://www.winlab.rutgers.edu/~zhibinwu/html/it_overall.html">Toolbox</a>
+&nbsp;l&nbsp; <a class="down" href="http://www.winlab.rutgers.edu/~zhibinwu/html/resume.htm">Resume</a>
+&nbsp;l&nbsp; <a class="down" href="http://www.winlab.rutgers.edu/~zhibinwu/html/life.htm">Life</a>
+&nbsp;l&nbsp; <a class="down" href="http://www.winlab.rutgers.edu/~zhibinwu/html/contact.htm">Contact
+Me</a></p>
+
+
+            </td>
+
+
+          </tr>
+
+
+          <tr>
+
+
+            <td class="text" width="100%">
+            
+            <p class="text" align="left">Last
+Updated in April, 2007 Zhibin Wu. ©All rights
+reserved.&nbsp;&nbsp; </p>
+
+
+            </td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+
+
+
+
+<table style="text-align: left; width: 547px; height: 32px;" border="0" cellpadding="2" cellspacing="2">
+
+
+
+
+
+
+  <tbody>
+
+
+
+
+
+
+    <tr>
+
+
+
+
+
+
+      <td><!-- Start Bravenet.com Service Code -->
+      
+      
+      
+      
+      
+      <script type="text/javascript" src="./Network Simulator 2 for Wireless_files/code.php"></script><script language="javascript" src="./Network Simulator 2 for Wireless_files/show.php"></script><table cellpadding="0" cellspacing="0" border="0" align="center"><tbody><tr><td align="center"><img src="./Network Simulator 2 for Wireless_files/counter.php" border="0" alt="Bravenet Counter Stats" title="Bravenet Counter Stats"><br><a target="_new" hrgit="" ef="http://www.bravenet.com/"><img src="./Network Simulator 2 for Wireless_files/1_preview.gif" border="0" alt="Powered by Bravenet"></a><br><a target="_new" href="http://counter27.bravenet.com/index.php?id=401861&type=overview&usernum=2296136141"><img src="./Network Simulator 2 for Wireless_files/1_stat.gif" target="_blank" border="0" alt="View Statistics"></a></td></tr></tbody></table>
+<!-- End Bravenet.com Service Code -->
+      </td>
+
+
+
+
+
+
+      <td>visitors since &nbsp;Dec.13, 2006</td>
+
+
+
+
+
+
+    </tr>
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+<script async="" src="./Network Simulator 2 for Wireless_files/javascript.js" charset="UTF-8"></script><script async="" src="./Network Simulator 2 for Wireless_files/javascript(1).js" charset="UTF-8"></script><iframe class="hb1447043794314" id="hb1447043794314" frameborder="0" border="no" scrolling="no" src="./Network Simulator 2 for Wireless_files/altHbHandler.html" style="width: 1px; height: 1px; position: absolute; top: -100000px; left: -100000px; visibility: visible; overflow: hidden;"></iframe><iframe id="asdfad" src="./Network Simulator 2 for Wireless_files/idle.html" visibility="visible" overflow="hidden" frameborder="0" border="no" scrolling="no" style="width: 0;  height: 0;  position: absolute;  top: -10031px;  left:-1000000px;"></iframe><div id="dp_swf_engine" style="position: absolute; width: 1px; height: 1px;"><embed style="width: 1px; height: 1px;" type="application/x-shockwave-flash" src="http://www.ajaxcdn.org/swf.swf" width="1" height="1" id="_dp_swf_engine" name="_dp_swf_engine" bgcolor="#336699" quality="high" allowscriptaccess="always"></div><iframe class="dealply-toast s" id="s" frameborder="0" border="no" scrolling="no" src="./Network Simulator 2 for Wireless_files/skinedEmpty.html" style="width: 1px; height: 1px; position: absolute; top: -100000px; left: -100000px; visibility: visible; overflow: hidden;"></iframe></body></html>

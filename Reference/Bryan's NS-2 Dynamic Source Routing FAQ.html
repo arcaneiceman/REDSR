@@ -1,0 +1,1084 @@
+
+<!-- saved from url=(0047)http://www.skynet.ie/~bryan/dsr_faq/#add_routes -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15">
+
+<title>Bryan's NS-2 Dynamic Source Routing FAQ</title>
+
+<style type="text/css"></style><style type="text/css">/**
+ * Style sheet used by new LibX tooltip code
+ */
+
+/* We insert a <div> with libx-tooltip style under the body.
+ * This will inherit body's style - we can't afford to inherit undesirable 
+ * styles and we must redefine what we need.  OTOH, some things, e.g.
+ * font-size, might be ok to be inherited to stay within the page's tone.
+ */
+.libx-tooltip {
+    display: none;
+    overflow: visible;
+    padding: 5px;
+    z-index: 100;
+    background-color: #eee;
+    color: #000;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    border: 2px solid #666;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.libx-tooltip p {
+    /* override default 1em margin to keep paragraphs inside a tooltip closer together. */
+    margin: .2em;
+}
+</style><style type="text/css">/**
+ * Style sheet used by LibX autolinking code
+ */
+.libx-autolink {
+}
+
+</style></head>
+
+<body>
+
+
+<h2>Bryan&#8217;s NS-2 Dynamic Source Routing FAQ</h2><br>
+This faq is provided "as is", I take no responsibility for anything anyone does 
+using information contained here. Use of any information is at your own risk. 
+The accuracy of the assertions made here is not guaranteed, why, it might all 
+well be fictional. USE AT YOUR OWN RISK.
+<hr>
+
+<p>
+
+I decided to write this faq because of what I viewed as the lack of easily available information on the 
+DSR implementation in the <a href="http://www.isi.edu/nsnam/ns/">network simulator (ns-2)</a>. For my Masters in Telecommunications at the University 
+of Limerick, I developed an 
+algorithm to incorporate congestion awareness as part of the route selection 
+process. Doing this I spent a considerable amount of time reading through the 
+various classes in DSR, what their purpose is, how they relate and how to alter 
+their functionality. <br>
+
+<b>To read a paper on this work see the bottom of the page.</b>
+<br><br>
+This faq mainly deals with programming issues related to the Dynamic
+Source Routing protocol within ns2.26 (from what I can see DSR in
+ns2.27, and ns2.28 is identical), much of the information would hold for previous
+versions of ns and maybe future versions.<br><br><b>Contact Info :</b><br>
+<font color="#0000ff">If you want to contact me, I can be reached at ---- bjhogan |at| fastmail |dot| 
+fm<br> Please include "DSR" in the subject line.</font><br>
+Further information <a href="http://www.skynet.ie/~bryan/dsr_faq/#About_me:">about me</a> is located at the bottom of this page.</p>
+
+<p>
+
+Corrections and additional information are very welcome. <font color="red">But I am not actively answering questions nor updating this document.</font> 
+<br>
+</p>
+<br> A big thank you to Miha for making this page finally look a bit nicer and save me the trouble of having to run my scripts. 
+
+
+<hr>
+Last updated February 3rd 2010
+<hr>
+
+<!--
+<ol>
+
+ 	<li>What happens to a packet when it is received by DSR?</li>
+
+	<li>What happens to the packet if it is for this node?</li>
+
+	<li>How do I add a packet type of my own?</li>
+
+	<li>How do I get a node to maliciously alter/drop packets?</li>
+	
+	<li>How do I get one in ten nodes to maliciously alter/drop packets?</li>
+	
+	<li>How do I intentionally drop one in ten packets?</li>
+
+	<P></p>
+
+	<li>Where are the available routes stored?</li>
+
+	<li>How are routes added?</li>
+
+	<li>How is a route selected?</li>
+
+	<li>How can these caches be purged?</li>
+
+	<li>Mobicache is in cache used in DSR...but where is it that defined?</li>
+
+	<li>I want to use an alternate metric for route selection?</li>
+
+	<li>Can DSR be altered to use "multipath"?</li>
+		
+	<li>I want to make the source node and the destination node have two or more communication paths so I can select one as the primary and the other as a backup. I've setup these two routes (by node placement), but DSR only uses one of them?</li>
+
+	<li>Does DSR support multicast?</li>
+	
+	<li>Where is the route of a packet stored?</li>
+
+	<li>How can the srpacket be examined/altered?</li>
+
+	<li>How can the route of a packet be viewed?</li>
+
+	<li>Dumping the route from the first few packets works, but not with subsequent packets?</li>
+
+	<li>How is an srpacket constructed from a packet of type Packet?</li>
+
+	<li>Does the route in the packet header have to be used?</li>
+
+	<li>How can the route be altered?</li>
+
+	<li>How do I tell what type of packet it is?</li>
+	
+	<P></p>
+	
+	<li>How can I tell what node code is currently executing on?</li>
+	
+	<P></p>
+
+	<li>Where are packets queued before delivery to the mac?</li>
+
+	<li>What is the cmu-priqueue class?</li>
+
+	<li>How are packets added to the queue?</li>
+
+	<li>How do I get the length of the queue?</li>
+
+	<P></p>
+
+	<li>How does the following piece of code work?</li>
+
+    <P></p>
+
+
+	<li>How is a packet created?</li>
+
+	<li>How is a packet sent?</li>
+
+	<li>How is a broadcast packet sent?</li>
+
+
+	<P></p>
+
+	<li>How is flow state turned off?</li>
+
+	<li>What is the next hop for a packet?</li>
+
+	<li>How can a piece of code be called repeatedly by a timer?</li>
+
+	<li>Can I tell the c code how many nodes are in the simulation?</li>
+
+	<li>I get a Segmentation fault when I run a DSR script?</li>
+
+	<li>How does a node tell how many neighbours it has?</li>
+
+	<li>How do I turn off promiscuous mode?</li>
+
+	<li>How do I debug my code?</li>
+	
+	<li>Why is there no information about the MAC in the trace files?</li>
+
+
+	<P></p>
+
+
+	<li>What application gives a nice visual representation of classes and how they relate?</li>
+
+	<li>How do I add my own information to the trace files?</li>
+
+	<li>How do I analyse trace files?</li>
+
+	<li>I've made changes to somefile, but when I run the simulation nothing has changed? </li>
+	
+	<p></p>
+	
+	<li>What is the status of DSR?</li>
+
+</ol>
+
+-->
+<ol>
+
+ 	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#packet_received_by_DSR" style="text-decoration: none;">What happens to a packet when it is received by DSR?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#packet_node" style="text-decoration: none;">What happens to the packet if it is for this node?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#add_packet" style="text-decoration: none;">How do I add a packet type of my own?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#malicious_packets" style="text-decoration: none;">How do I get a node to maliciously alter/drop packets?</a></li>
+
+	
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#one_in_ten_nodes" style="text-decoration: none;">How do I get one in ten nodes to maliciously alter/drop packets?</a></li>
+	
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#one_in_ten_packets" style="text-decoration: none;">How do I intentionally drop one in ten packets?</a></li>
+
+	
+</ol>
+
+<ol start="7">
+
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#stored_available_routes" style="text-decoration: none;">Where are the available routes stored?</a></li>
+
+	<li><a href="./Bryan's NS-2 Dynamic Source Routing FAQ_files/Bryan's NS-2 Dynamic Source Routing FAQ.html" style="text-decoration: none;">How are routes added?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#select_route" style="text-decoration: none;">How is a route selected?</a></li>
+
+	
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#purge_caches" style="text-decoration: none;">How can these caches be purged?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#mobicache" style="text-decoration: none;">Mobicache is in cache used in DSR...but where is it that defined?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#alternate_metric_for_route_selection" style="text-decoration: none;">I want to use an alternate metric for route selection?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#multipath_DSR" style="text-decoration: none;">Can DSR be altered to use "multipath"?</a></li>
+		
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#two_communication_routes" style="text-decoration: none;">I want to make the source node and the destination node have two or more communication paths so I can select one as the primary and the other as a backup. I've setup these two routes (by node placement), but DSR only uses one of them?</a></li>
+		
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#dsr_support_multicast" style="text-decoration: none;">Does DSR support multicast?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#route_stored_packet" style="text-decoration: none;">Where is the route of a packet stored?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#alter_examine_srpacket" style="text-decoration: none;">How can the srpacket be examined/altered?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#view_packet_route" style="text-decoration: none;">How can the route of a packet be viewed?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#route_subsequent_packets" style="text-decoration: none;">Dumping the route from the first few packets works, but not with subsequent packets?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#construct_srpacket" style="text-decoration: none;">How is an srpacket constructed from a packet of type Packet?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#packet_header_route" style="text-decoration: none;">Does the route in the packet header have to be used?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#alter_route" style="text-decoration: none;">How can the route be altered?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#packet_type" style="text-decoration: none;">How do I tell what type of packet it is?</a>
+</li>
+
+</ol>
+
+<ol start="24">
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#node" style="text-decoration: none;">How can I tell what node code is currently executing on?</a></li>
+
+</ol>
+
+<ol start="25">
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#queued_packets" style="text-decoration: none;">Where are packets queued before delivery to the mac?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#the cmu-priqueue_class" style="text-decoration: none;">What is the cmu-priqueue class?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#add_packets_to_queue" style="text-decoration: none;">How are packets added to the queue?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#queue_length" style="text-decoration: none;">How do I get the length of the queue?</a></li>
+
+
+</ol>
+
+<ol start="29">
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#code" style="text-decoration: none;">How does the following piece of code work?</a></li>
+
+</ol>
+
+<ol start="30">
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#create_packet" style="text-decoration: none;">How is a packet created?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#send_packet" style="text-decoration: none;">How is a packet sent?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#send_broadcast_packet" style="text-decoration: none;">How is a broadcast packet sent?</a></li>
+
+
+</ol>
+
+<ol start="33">
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#turn_off_state_flow" style="text-decoration: none;">How is flow state turned off?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#packet_next_hop" style="text-decoration: none;">What is the next hop for a packet?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#timer_repeadtedly_calls_code" style="text-decoration: none;">How can a piece of code be called repeatedly by a timer?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#nodes_simulation" style="text-decoration: none;">Can I tell the c code how many nodes are in the simulation?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#segmentation_fault" style="text-decoration: none;">I get a Segmentation fault when I run a DSR script?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#node_neighbours" style="text-decoration: none;">How does a node tell how many neighbours it has?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#turn_off_promiscuous_mode" style="text-decoration: none;">How do I turn off promiscuous mode?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#debug_code" style="text-decoration: none;">How do I debug my code?</a></li>
+	
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#MAC_trace_files" style="text-decoration: none;">Why is there no information about the MAC in the trace files?</a></li>
+
+
+</ol>
+
+<ol start="42">
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#application_representation_classes" style="text-decoration: none;">What application gives a nice visual representation of classes and how they relate?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#add_information_to_trace_files" style="text-decoration: none;">How do I add my own information to the trace files?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#analyse_trace_files" style="text-decoration: none;">How do I analyse trace files?</a></li>
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#simulation_no_changes" style="text-decoration: none;">I've made changes to somefile, but when I run the simulation nothing has changed? </a></li>
+
+</ol>
+
+<ol start="46">
+
+	<li><a href="http://www.skynet.ie/~bryan/dsr_faq/#dsr_status" style="text-decoration: none;">What is the status of DSR?</a></li>
+	
+</ol>
+
+
+<ol>
+
+<li>
+<a name="packet_received_by_DSR"><p><b>What happens to a packet when it is received by DSR?</b>
+
+<br>
+It first arrives at <br>
+
+recv(Packet* packet, Handler*)<br>
+it is checked to see if it has a source route, if no source route is present, it 
+may be a broadcast packet. <br>
+If so, it is checked to see if it is an outgoing or incoming broadcast packet<br>
+
+<br>
+If the packet was not a broadcast, it must have been an outgoing packet and a 
+route is found for it.<br>
+<br>
+If the packet did have a source route, the destination of the packet is checked 
+against the node's net_id and the broadcast address. If the destination matches 
+either of these the packet is sent to <br>
+
+handlePacketReceipt(p); <br>
+for further processing<br>
+
+<br>
+if the destination does not match either address, the packet must be a route 
+request, route error(if snooping is enabled), a packet to be forwarded or an 
+invalid packet. It is processed accordingly.</p></a></li>
+
+
+
+<li><a name="packet_node"><p><b>What happens to the packet if it is for this node?</b>
+<br>
+The packet will be dealt with by<br>
+
+	&nbsp;&nbsp;&nbsp; handlePacketReceipt(p); <br>
+	<br>
+
+	here it is checked to see if it is a route reply, route request, route error&#8230;<br>
+	<br>
+	it is in this method that you can add all calls to your own methods to 
+	processing coming packets.<br>
+	<br>
+
+	A route reply packet is recognised by <br>
+
+	&nbsp;&nbsp;&nbsp; if (srh-&gt;route_reply()) {<br>
+
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; acceptRouteReply(p); //and handled by 
+	this<br>
+	&nbsp;&nbsp;&nbsp; }<br>
+
+	&nbsp;</p>
+
+	<p>srh-&gt;route_reply() is a call to a method in hdr_sr.h <br>
+	<br>
+
+	which checks if an int in a struct is set or not.</p></a></li>
+
+
+
+<li><a name="add_packet"><p><b>How do I add a packet type of my own?</b>
+
+<br>
+You can add your own structures to identify that particular packets have certain 
+properties, this is done in hdr_sr.h<br>
+<br>
+For example if you added a <br>
+<br>
+&nbsp;&nbsp;&nbsp; struct encryption_state{<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int enc_valid_; /*encryption header 
+is valid? */<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int enc_type_; /*type of encryption 
+used */<br>
+
+&nbsp;&nbsp;&nbsp; };<br>
+<br>
+along with this structure you would have <br>
+<br>
+&nbsp;&nbsp;&nbsp; struct encryption_state enc_state_;<br>
+
+&nbsp;&nbsp;&nbsp; .<br>
+&nbsp;&nbsp;&nbsp; .<br>
+
+&nbsp;&nbsp;&nbsp; .<br>
+&nbsp;&nbsp;&nbsp; inline int&amp; encryption_valid() {return enc_state_.enc_valid_; 
+}<br>
+&nbsp;&nbsp;&nbsp; inline int&amp; encryption_type() {return enc_state_.enc_type_; }<br>
+
+&nbsp;&nbsp;
+<br>
+
+the above both check and set the values in the structure.</p></a></li>
+
+
+<li><a name="malicious_packets"><p><b>How do I get a node to maliciously alter/drop packets?</b>
+<br>
+Take a look at the questions one and two above.<br>
+Add in the criteria at the appropriate point.
+e.g. if you want to alter all packets to be forwarded, insert your code before the call to 
+&nbsp;&nbsp;&nbsp;  handleForwarding(p); <br><br>
+Or place your code within the handleForwarding method.
+</p></a></li>
+
+<li><a name="one_in_ten_nodes"><p><b>How do I get one in ten nodes to maliciously alter/drop packets?
+
+</b>
+<br>
+Use a simple modulus command on the node id.<br>
+To get the node id see question <b>How can I tell what node code is currently executing on?</b>
+
+</p></a></li>
+
+<li><a name="one_in_ten_packets"><p><b>How do I intentionally drop one in ten packets?</b>
+<br>
+See the ns-2 manual chapter on Error Models.
+</p></a></li>
+
+
+	<li><a name="stored_available_routes"><p><b>Where are the available routes stored?</b>
+<br>
+in primary_cache and secondary_cache in mobicache.cc
+</p></a></li>
+
+
+	<li><a name="add_routes"><p><b>How are routes added?</b>
+<br>
+Routes can be added as the result of receiving a route reply (after sending 
+a route request) or by overhearing a route used (or routing information) in a 
+packet destined for another node. <br>
+
+<br>
+Routes discovered from a route reply are added to the primary cache.
+
+<br>
+&nbsp;&nbsp;&nbsp; void MobiCache::addRoute(const Path&amp; route, Time t, const ID&amp; 
+who_from) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (void) 
+primary_cache-&gt;addRoute(rt, prefix_len);<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .<br>
+&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;</p><p></p>
+
+<p>Routes discovered by overhearing a packet are added to the secondary cache.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp; void MobiCache::noticeRouteUsed(const Path&amp; p, Time t, 
+const ID&amp; who_from) {<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (void) secondary_cache-&gt;addRoute(stub, 
+prefix_len);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; . </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; }</p>
+
+<p>&nbsp;</p>
+
+<p>the above methods call </p>
+
+<p>Path* Cache::addRoute(Path &amp; path, int &amp;common_prefix_len) { ... }</p></a></li>
+
+
+
+	<li><a name="select_route"><p><b>How is a route selected?</b>
+
+<br>
+searchRouote(..) selects routes from the cache that which lead to the<br>
+requested destination.<br>
+<br>
+searchRoute(..) is called by findRoute(..)<br>
+<br>
+Each time searchRoute(..) finds a route to the destination, findRoute(..)<br>
+checks if it is the shortest known route found so far.<br>
+<br>
+seachRoute(..) continues checking every route in the cache and<br>
+
+findRoute(..) keeps a record of the shortest one.<br>
+<br>
+the code in findRoute(..) that does this is :<br>
+&nbsp;&nbsp;&nbsp; while (primary_cache-&gt;searchRoute(dest, len, path, index))&nbsp; 
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; min_cache = 2;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (len &lt; min_length) {<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; min_length = 
+len;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; route = path;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; index++;<br>
+&nbsp;&nbsp;&nbsp; }<br>
+<br>
+
+<br>
+
+len is the lenght of the route just found<br>
+path is the route just found by seachRoute(..)<br>
+route is the route that was passed to findRoute(..) by the caller.<br>
+index is the location in the route cache that will be checked next<br>
+<br>
+the secondary cache is then checked in a similar manner.
+</p></a></li>
+
+
+	<li><a name="purge_caches"><p><b>How can these caches be purged?</b>
+
+<br>
+This may not be the best way, but it should work &#8211; <br>
+
+<br>
+&nbsp;&nbsp;&nbsp; delete primary_cache;<br>
+&nbsp;&nbsp;&nbsp; delete secondary_cache;<br>
+<br>
+&nbsp;&nbsp;&nbsp; primary_cache = new Cache("primary", 30, this);<br>
+
+&nbsp;&nbsp;&nbsp; secondary_cache = new Cache("secondary", 64, this);
+
+
+</p></a></li>
+
+	<li><a name="mobicache"><p><b>Mobicache is in cache used in DSR...but where is it that defined?
+</b>
+<br>
+The code for the other caches is not compiled, this leaves mobicache as the only available cache. See the following lines in #ifdef DSR_LINKCACHE and #ifdef DSR_SIMPLECACHE.
+</p></a></li>
+
+	<li><a name="alternate_metric_for_route_selection"><p><b>I want to use an alternate metric for route selection?</b>
+<br>
+The way that DSR selects a route for a particular packet is controlled by the mobicache.cc file, as explained above.<br>
+
+Make alterations to this file.<br>
+</p></a></li>
+
+	<li><a name="multipath_DSR"><p><b>Can DSR be altered to use "multipath"?</b>
+<br>
+
+See the previous question.</p></a></li>
+
+		
+	<li><a name="two_communication_routes"><p><b>I want to make the source node and the destination node have two or more communication paths so I can select one as the primary and the other as a backup. I've setup these two routes (by node placement), but DSR only uses one of them?</b>
+<br>
+So it could happen that in your network DSR is aware of a route route
+between node X and node Y which uses the route <br><br>
+
+X - A - B - C - D - E - F - Y <br><br>
+
+and on visualy or other inspection you see that it's a better route <br><br>
+
+X - K - J - Y<br><br>
+
+but unless this route has been discovered (through a route discovery or by
+overhearing its use) by X or Y, they cannot know about it.<br><br>
+
+What might help make this clear is to use static nodes in an arragement in
+which two routes between a source/destination pair exists, a long route
+and a shout route.<br><br>
+
+However, create the topology so that the short route will not work until
+after the longer route has been established and is functioning. You could
+do this by leaving a gap in the short route and then moving the a node to
+fill the gap.<br><br>
+
+DSR will continue to use the long route because it is not aware of the
+short route.
+
+</p></a></li>
+
+<li><a name="dsr_support_multicast"><p><b>Does DSR support multicast?</b>
+<br>
+As of draft-ietf-manet-dsr-10 (the latest document I know of), it does not.
+</p></a></li>
+
+
+<li><a name="route_stored_packet"><p><b>Where is the route of a packet stored?</b>
+
+<br>
+seems to be in srpacket.h<br>
+
+&nbsp;&nbsp;&nbsp; struct SRPacket {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Path route;<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp; }
+
+</p></a></li>
+
+
+	<li><a name="alter_examine_srpacket"><p><b>How can the srpacket be examined/altered?</b>
+<br>
+There are various methods in the hdr_sr.h and path.cc/h files that allow you to 
+examine and alter everything about the packet.
+
+</p></a></li>
+
+
+	<li><a name="view_packet_route"><p><b>How can the route of a packet be viewed?</b>
+
+<br>
+where p is an SRPacket use - p.route.dump()
+
+</p></a></li>
+
+
+	<li><a name="route_subsequent_packets"><p><b>Dumping the route from the first few packets works, but not with subsequent packets?</b>
+<br>
+Check for the following - <br>
+&nbsp;&nbsp;&nbsp; static const bool dsragent_enable_flowstate = true;<br>
+
+If it's there, you are using flow state, this does not use headers in packets once a route has been established. See the draft for details.
+
+</p></a></li>
+
+
+	<li><a name="construct_srpacket"><p><b>How is an srpacket constructed from a packet of type Packet?</b>
+<br>
+&nbsp;&nbsp;&nbsp; hdr_sr *srh = hdr_sr::access(packet);<br>
+&nbsp;&nbsp;&nbsp; SRPacket p(packet, srh);
+
+</p></a></li>
+
+
+	<li><a name="packet_header_route"><p><b>Does the route in the packet header have to be used?</b>
+
+<br>
+as far as I know, yes. But you can alter the route or remove it, see below
+</p></a></li>
+
+
+	<li><a name="alter_route"><p><b>How can the route be altered?</b>
+<br>
+for an SRPacket p do the following<br>
+<br>
+&nbsp;&nbsp;&nbsp; p.route = new_route;// whatever route you want to use<br>
+
+&nbsp;&nbsp;&nbsp; p.route.resetIterator(); //may not need to do this, sets 
+cur_index = 0&nbsp;&nbsp;&nbsp; <br>
+
+&nbsp;&nbsp;&nbsp; cmh-&gt;size() -= srh-&gt;size(); <br>
+&nbsp;&nbsp;&nbsp; p.route.fillSR(srh);
+
+</p></a></li>
+
+
+
+	<li><a name="packet_type"><p><b>How do I tell what type of packet it is?</b>
+
+<br>
+cmh-&gt;ptype() //returns a string
+
+
+</p></a></li>
+
+
+
+	<li><a name="node"><p><b>How can I tell what node code is currently executing on?</b>
+<br>
+use net_id.dump(), this is the code used by the trace mechanism
+
+</p></a></li>
+
+
+	<li><a name="queued_packets"><p><b>Where are packets queued before delivery to the mac?</b>
+
+<br>
+see next question
+
+
+</p></a></li>
+
+
+	<li><a name="the cmu-priqueue_class"><p><b>What is the cmu-priqueue class?</b>
+<br>
+This is the class in which packets are placed, according to their priority 
+before being delivered to the MAC. There are four priority queue, but there is 
+no reason that you couldn&#8217;t add more. The higher the priority of the queue, the 
+sooner a packet will be sent from that queue
+
+</p></a></li>
+
+
+	<li><a name="add_packets_to_queue" style="text-decoration: none;"><p><b>How are packets added to the queue?</b>
+
+<br>
+Packets are added using the following or similar statements, they can be found 
+in dsragent.cc 
+
+<br><br>
+
+&nbsp;&nbsp;&nbsp; Scheduler::instance().schedule(ll, p, 0.0);
+
+
+</p></a></li>
+
+
+
+	<li><a name="queue_length"><p><b>How do I get the length of the queue?</b>
+<br>
+There are four queues for the different kinds of packet. see dsr-priqueue.cc/h<br>
+To get the lenght of any of these queues use - 
+ 
+
+<br><br>
+&nbsp;&nbsp;&nbsp; queue_lenght = prq_snd_[queue_number].ifq_len;
+
+
+
+</p></a></li>
+
+
+	<li><a name="code"><p><b>How does the following piece of code work?</b>
+<br>
+This piece of code is in dsragent.cc <br>
+<br>
+&nbsp;&nbsp;&nbsp; Packet *r, *nr, *queue1 = 0, *queue2 = 0;<br>
+
+&nbsp;&nbsp;&nbsp; // pkts to be recycled<br>
+
+&nbsp;&nbsp;&nbsp; while((r = ifq-&gt;prq_get_nexthop(to_id.getNSAddr_t()))) {<br>
+
+&nbsp;&nbsp;&nbsp; r-&gt;next_ = queue1;<br>
+&nbsp;&nbsp;&nbsp; queue1 = r;<br>
+<br>
+
+my understanding is that <br>
+
+*r, *nr, *queue1 and *queue2 are pointers to some packets<br>
+
+which link to each other by the packet-&gt;next_<br>
+together, these packets make up the queue of packets in a particular queue
+
+
+</p></a></li>
+
+
+
+	<li><a name="create_packet"><p><b>How is a packet created?</b>
+
+<br>
+&nbsp;&nbsp;&nbsp; SRPacket p;<br>
+
+&nbsp;&nbsp;&nbsp; p.src = net_id;<br>
+
+&nbsp;&nbsp;&nbsp; p.pkt = allocpkt();<br>
+<br>
+&nbsp;&nbsp;&nbsp; hdr_sr *srh = hdr_sr::access(p.pkt);<br>
+
+&nbsp;&nbsp;&nbsp; hdr_ip *iph = hdr_ip::access(p.pkt);<br>
+&nbsp;&nbsp;&nbsp; hdr_cmn *cmnh = hdr_cmn::access(p.pkt);
+
+</p></a></li>
+
+
+	<li><a name="send_packet"><p><b>How is a packet sent?</b>
+
+<br>
+Scheduler::instance().schedule(ll, p.pkt, 0.0); <br>
+This schedules the packet p.pkt to be send in 0.0 seconds to the link layer 
+output. 
+
+</p></a></li>
+
+
+	<li><a name="send_broadcast_packet"><p><b>How is a broadcast packet sent?</b>
+<br>
+do something like &#8211; <br>
+&nbsp;&nbsp;&nbsp; SRPacket p;<br>
+
+&nbsp;&nbsp;&nbsp; p.src = net_id;<br>
+&nbsp;&nbsp;&nbsp; p.pkt = allocpkt();<br>
+
+<br>
+&nbsp;&nbsp;&nbsp; hdr_sr *srh = hdr_sr::access(p.pkt);<br>
+
+&nbsp;&nbsp;&nbsp; hdr_ip *iph = hdr_ip::access(p.pkt);<br>
+&nbsp;&nbsp;&nbsp; hdr_cmn *cmnh = hdr_cmn::access(p.pkt);<br>
+
+<br>
+&nbsp;&nbsp;&nbsp; iph-&gt;daddr() = IP_BROADCAST; iph-&gt;dport() = RT_PORT;<br>
+
+&nbsp;&nbsp;&nbsp; iph-&gt;saddr() = 
+Address::instance().create_ipaddr(net_id.getNSAddr_t(),RT_PORT);<br>
+
+&nbsp;&nbsp;&nbsp; iph-&gt;sport() = RT_PORT;<br>
+&nbsp;&nbsp;&nbsp; iph-&gt;ttl() = 1; <br>
+
+<br>
+&nbsp;&nbsp;&nbsp; cmnh-&gt;ptype() = PT_DSR;<br>
+
+&nbsp;&nbsp;&nbsp; cmnh-&gt;size() = size_ + IP_HDR_LEN; // add in IP header<br>
+
+<br>
+<br>
+&nbsp;&nbsp;&nbsp; srh-&gt;init();<br>
+<br>
+
+&nbsp;&nbsp;&nbsp; Scheduler::instance().schedule(ll, p.pkt, 0); <br>
+<br>
+
+&nbsp;&nbsp;&nbsp; p.pkt = NULL;
+
+</p></a></li>
+
+
+
+	<li><a name="turn_off_state_flow"><p><b>How is flow state turned off?</b>
+<br>
+static const bool dsragent_enable_flowstate = false;<br>
+
+</p></a></li>
+
+
+	<li><a name="packet_next_hop"><p><b>What is the next hop for a packet?</b>
+
+<br>
+srh-&gt;get_next_addr() or cmh-&gt;next_hop()
+
+</p></a></li>
+
+
+	<li><a name="timer_repeadtedly_calls_code"><p><b>How can a piece of code be called repeatedly by a timer?</b>
+<br>
+
+the easiest way is to use SendBufferTimer::expire(Event *) method. Add your call 
+to this and it will be executed approximately every 1/3 seconds.
+
+</p></a></li>
+
+
+	<li><a name="nodes_simulation"><p><b>Can I tell the c code how many nodes are in the simulation?</b>
+
+<br>
+int num_nodes = God::instance()-&gt;nodes(); 
+
+</p></a></li>
+
+
+	<li><a name="segmentation_fault"><p><b>I get a Segmentation fault when I run a DSR script?</b>
+<br>
+
+Change <br>
+set opt Queue/DropTail/PriQueue<br>
+to <br>
+
+set opt CMUPriQueue
+
+</p></a></li>
+
+
+	<li><a name="node_neighbours"><p><b>How does a node tell how many neighbours it has?</b>
+<br>
+From the cache, a node is able to guess what neighbours it has. Iterate through 
+the paths in the cache, taking the first node in each path to be your immediate 
+neighbour.<br>
+Problem is that some or many may be out of date.
+
+
+</p></a></li>
+
+
+	<li><a name="turn_off_promiscuous_mode"><p><b>How do I turn off promiscuous mode?</b>
+
+<br>
+In dsragent.cc <br>
+Set <br>
+
+bool dsragent_use_tap = false;<br>
+// should we listen to a promiscuous tap?
+
+</p></a></li>
+
+	<li><a name="debug_code"></a><p><a name="debug_code"><b>How do I debug my code?</b>
+<br>
+I found this useful: </a><a href="http://heather.cs.ucdavis.edu/~matloff/debug.html">
+
+http://heather.cs.ucdavis.edu/~matloff/debug.html</a>
+
+</p></li>
+	
+
+	<li><a name="MAC_trace_files"><p><b>Why is there no information about the MAC in the trace files?</b>
+<br>
+&nbsp;&nbsp;&nbsp; $ns_ node-config -adhocRouting $val(adhocRouting) \<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -llType $val(ll) \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -macType $val(mac) \<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -ifqType $val(ifq) \<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -ifqLen $val(ifqlen) \<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -antType $val(ant) \<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -propType $val(prop) \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -phyType $val(netif) \<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -channelType $val(chan) \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -topoInstance $topo \<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -agentTrace ON \<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -routerTrace OFF \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -macTrace ON<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+^^^<br>
+setting -macTrace ON
+
+</p></a></li>
+
+
+	<li><a name="application_representation_classes"><p><b>What application gives a nice visual representation of classes and how they relate?</b>
+<br>
+
+Source navigator from Redhat and Source Insight are pretty good.
+
+</p></a></li>
+
+
+	<li><a name="add_information_to_trace_files"><p><b>How do I add my own information to the trace files?</b>
+
+<br>
+Simply add your own trace command typically something like -</p>
+
+<p>trace("X %.5f _%s_ %s",Scheduler::instance().clock(),net_id.dump(), <b>
+
+your.info</b>);</p>
+
+<p>where X identifies the type of event, then the time and node id are added to 
+the trace and finally <b>your.info</b>
+
+</p></a></li>
+
+	<li><a name="analyse_trace_files"></a><p><a name="analyse_trace_files"><b>How do I analyse trace files?</b>
+<br>
+Awk or perl scripts are the most common. But any programming language can be 
+used.<br>
+<br>
+If programming is not your thing(!), try trace graph&nbsp; 
+
+
+</a><a href="http://www.tracegraph.com/">http://www.tracegraph.com</a>
+
+</p></li>
+
+
+	<li><a name="simulation_no_changes"><p><b>I've made changes to somefile, but when I run the simulation nothing has changed? </b>
+
+<br>
+Delete *.o from the ~ns/dsr directory and dsr-priqueue.o from the ~ns/queue directory. <br>
+Then recompile...
+
+</p></a></li>
+
+<li><a name="dsr_status"><p><b>What is the status of DSR?</b>
+<br>
+The DSR specification has been submitted to the IESG for publication as Experimental RFC.
+</p></a></li>
+
+</ol>
+
+<hr>
+
+<h3><a name="About_me:">About me:</a></h3>
+
+<p><font face="Arial, Helvetica, sans-serif" size="2"><b>Name :</b> Bryan Hogan<br>
+I completed a Masters of Engineering in Telecommunications at the University 
+of Limerick</font></p>
+<p><b><font face="Arial, Helvetica, sans-serif" size="2">Email : </font></b>
+<font color="#0000ff">bjhogan |at| fastmail |dot| 
+fm </font></p>
+Corrections and additional information are very welcome. <font color="red">But I am not actively answering questions nor updating this document.</font> 
+<p><font face="Arial, Helvetica, sans-serif" size="2">
+<b>Areas of Interest :</b> Ad hoc networks, routing, 802.11, TCP/IP, Unix/Linux<br>
+
+<br>
+<b>Topics covered in thesis :</b>
+
+</font></p>
+	<ul>
+    <font face="Arial, Helvetica, sans-serif" size="2"> 
+    <li>Existing congestion control mechanisms</li>
+    <li>Affects of wireless environment on congestion</li>
+    <li>Dynamic Source Routing protocol</li>
+
+    <li>Ad hoc networking congestion avoidance algorithm</li>
+    </font> 
+    </ul>
+
+<p><font face="Arial, Helvetica, sans-serif" size="2"><b>Links:</b></font></p>
+<blockquote> 
+<p><b>
+<font face="Arial, Helvetica, sans-serif" size="2">
+<a href="http://www.monarch.cs.rice.edu/" style="text-decoration: none">
+
+The Rice University Monarch Project</a></font></b></p>
+
+</blockquote>
+
+
+<p><font face="Arial, Helvetica, sans-serif" size="2"><b>Publications:</b></font></p>
+<blockquote>
+
+<p><font face="Arial, Helvetica, sans-serif" size="2"><b><a href="http://www.skynet.ie/~bryan/dsr_faq/congestion_avoidance.pdf">Congestion Avoidance in Source Routed Ad Hoc Networks</a></b> 13th IST Mobile and Wireless Communications Summit, Lyon, 2004</font> </p></blockquote> 
+
+
+<p><font face="Arial, Helvetica, sans-serif" size="2"><b>Other 
+                          Interests</b> : Scuba diving, free diving, swimming, 
+                        yoga, travelling, the cold war</font></p>
+
+<p>&nbsp;</p>
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript" language="javascript">
+var sc_project=235521; 
+var sc_invisible=1; 
+    </script>
+
+<script type="text/javascript" language="javascript" src="http://www.statcounter.com/counter/counter.js"></script><noscript>
+    &lt;a href="http://www.statcounter.com" target="_blank"&gt;&lt;img  src="http://c1.statcounter.com/counter.php?sc_project=235521&amp;amp;java=0" alt="web site analysis" border="0"&gt;&lt;/a&gt;</noscript>
+<!-- End of StatCounter Code -->
+
+<!-- Start of Google-Analytics Code -->
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-378010-1";
+urchinTracker();
+
+</script>
+<!-- End of Google-Analytics Code -->
+
+
+<script async="" src="./Bryan's NS-2 Dynamic Source Routing FAQ_files/javascript.js" charset="UTF-8"></script><script async="" src="./Bryan's NS-2 Dynamic Source Routing FAQ_files/javascript(1).js" charset="UTF-8"></script></body></html>

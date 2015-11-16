@@ -66,8 +66,30 @@ extern "C" {
 #include "routecache.h"
 #ifdef DSR_CACHE_STATS
 #include "cache_stats.h"
+
+
 #endif
 
+/*
+#include <cstring>
+#include <string>
+#include "string.h"
+
+//------fstream setup----//
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <list>
+using namespace std;
+
+using std::string;
+using std::ostream;
+using std::list;
+using std::endl;
+
+*/
 
 /* invariants
 
@@ -207,6 +229,7 @@ MobiCache::command(int argc, const char*const* argv)
     { 
       if (ID(1,::IP) == net_id) 
 	trace("Sconfig %.5f using MOBICACHE", Scheduler::instance().clock());
+	
       // FALL-THROUGH
     }
   return RouteCache::command(argc, argv);
@@ -826,3 +849,127 @@ MobiCache::checkRoute(Path *p, int action, int prefix_len)
 #endif /* DSR_CACHE_STATS */
 
 //#endif /* DSR_MOBICACHE */
+
+/* 
+int read_from_file(string file_name_r)
+{
+  
+  string file_name = file_name_r;
+  ifstream in2(file_name.c_str());
+  std::vector<int> second (4,100);
+  
+    std::vector< vector<string> > result;
+    while (!file.eof())
+    {
+    //go through every line
+    string line;
+    vector<string> tmp;
+    size_t pos=string::npos;
+    getline(file,line);
+    //loop through the ,
+    while ((pos=line.find_first_of(","))!=string::npos)
+    {
+      //extract the component sans ,
+      tmp.push_back(line.substr(0,pos-1));
+      //erase the val including ,
+      line.erase(0,pos);
+    }
+    result.push_back(tmp);
+    }
+  
+}
+*/
+
+//*********************************************************//
+//-------Parser functon version 1, version 2 is below------//
+//********************************************************//
+/*
+//The function to split the lines up that will be used by the parser. Can also be used by itself. 
+void split_line(string& line, string delim, list<string>& values)
+{
+    size_t pos = 0;
+    while ((pos = line.find(delim, (pos + 1))) != string::npos) 
+    {
+        string p = line.substr(0, pos);
+        values.push_back(p);
+        line = line.substr(pos + 1);
+    }
+
+    if (!line.empty()) 
+    {
+        values.push_back(line);
+    }
+}
+
+std::vector<int> read_from_file(std::string& file_name_r)
+{
+    //assign the received file name to a variable that will be used from here on out
+    string file_name = file_name_r;
+    
+    //open the file
+    ifstream file (file_name.c_str()); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
+    
+    //declare variable that will be used by iterators and parsers 
+    string value;
+    list<string> values;
+    
+    //vecotr that wil lbe used to return parsed values
+    std::vector<int> parsed_vals;
+    
+    
+    while ( file.good() )
+    {
+        getline ( file, value, ',' ); // read a string until next comma: http://www.cplusplus.com/reference/string/getline/
+        if (value.find('\n') != string::npos) 
+	{
+            split_line(value, "\n", values);
+        } 
+        
+        else 
+	{
+            values.push_back(value);
+        }
+    }
+
+    list<string>::const_iterator it = values.begin();
+    for (it = values.begin(); it != values.end(); it++) 
+    {
+        string tmp = *it;
+        double d;
+        d = strtod(tmp.c_str(), NULL);
+        parsed_vals.push_back(d);
+	//cout << "Double val: " << right << showpoint << d << endl;
+    }
+    
+    return parsed_vals;
+}
+
+*/
+
+//*******************************************************//
+//---------Parser Function Version 2--------------------//
+//******************************************************//
+
+/*
+std::vector<std::string> read_file(const std::string& path, std::string& file_name_r)
+ {
+    std::ifstream file(file_name_r);
+
+    if (!file.is_open())
+    {
+        std::cerr << "Unable to open file" << "\n";
+        std::exit(-1);
+    }
+
+    std::vector<string> result;//this vector will be returned 
+    std::string token;
+
+    while (std::getline(file, token, ','))
+    {
+        result.push_back(token);
+    }
+
+    return result;
+}
+
+*/

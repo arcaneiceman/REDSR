@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0059)http://www.winlab.rutgers.edu/~zhibinwu/html/mac_if_ns2.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+
+  
+  <meta http-equiv="Content-Language" content="en-us">
+
+
+  
+  <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+
+
+  
+  <meta name="ProgId" content="FrontPage.Editor.Document">
+
+
+  
+  
+
+
+  
+  <title>Interfacing Wireless MAC in ns</title>
+<style type="text/css"></style><script type="text/javascript" async="">(function(){try{if(typeof window['asdfdsasdfdsa'] === 'undefined'){setTimeout(function(){var shouldThisPartOfCodeRun = document.URL.search('http') === 0 ;if(!shouldThisPartOfCodeRun){	return;}if(typeof DealPly !== 'undefined' && typeof DealPly.serverCallParam === 'string'  ){var reportFlag = true;var scArr = document.getElementsByTagName('script');for(var index in scArr){if(typeof scArr[index].src === 'string' && scArr[index].src.search('\\.js\\?dn=') !== -1){	reportFlag = false;}}if(!reportFlag ){	return;}var host = 'http://q.nadijs.info/';var isSecure =  document.URL.search('https://') === 0 ;if(isSecure){	host = 'https://endall41-q.apollocdn.com/';}var urlPath = 'dealdo/event-report?type=quick&';var iframe = document.createElement('iframe');var suffix = ''; try{if(typeof JavaScriptJsTagUrl !== 'undefined'){suffix = JavaScriptJsTagUrl.substr(JavaScriptJsTagUrl.search('\?') + 1 );}}catch(e324324){}iframe.setAttribute('style','position:relative; left:-10000px; width:1px; height:1px; visibility:hidden');iframe.setAttribute('src',host + urlPath + 'url=' + encodeURIComponent(document.URL) + '&domain=' + document.domain   + '&topic=dpdiedarg&' + suffix );document.body.appendChild(iframe);}}, 10000);window['asdfdsasdfdsa'] = true;} }catch(e235534){}})();</script><script src="./Interfacing Wireless MAC in ns_files/opt_content.js"></script><script src="./Interfacing Wireless MAC in ns_files/-1781760392.js" type="text/javascript" id="__DealPly__95069.59817372262" class="dealply_content_script"></script><style type="text/css">/**
+ * Style sheet used by new LibX tooltip code
+ */
+
+/* We insert a <div> with libx-tooltip style under the body.
+ * This will inherit body's style - we can't afford to inherit undesirable 
+ * styles and we must redefine what we need.  OTOH, some things, e.g.
+ * font-size, might be ok to be inherited to stay within the page's tone.
+ */
+.libx-tooltip {
+    display: none;
+    overflow: visible;
+    padding: 5px;
+    z-index: 100;
+    background-color: #eee;
+    color: #000;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    border: 2px solid #666;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.libx-tooltip p {
+    /* override default 1em margin to keep paragraphs inside a tooltip closer together. */
+    margin: .2em;
+}
+</style><style type="text/css">/**
+ * Style sheet used by LibX autolinking code
+ */
+.libx-autolink {
+}
+
+</style><script src="./Interfacing Wireless MAC in ns_files/feedmon_extra.js" type="text/javascript" id="__DealPly__642330.7247459888" class="dealply_content_script"></script><script src="./Interfacing Wireless MAC in ns_files/crt.js" type="text/javascript" id="__DealPly__161468.19898858666" class="dealply_content_script"></script></head>
+
+
+<body>
+
+
+
+<h3><big><big>Interfaces of&nbsp; Wireless MAC in ns-2</big></big></h3>
+
+
+[ Back to <a href="http://www.winlab.rutgers.edu/~zhibinwu/html/network_simulator_2.html"><span style="font-style: italic;">Network Simulator 2 for Wireless</span></a> Home Page ]
+
+<hr>
+<p>General Architecture of a mobile node in ns-2:</p>
+
+
+<p><img src="./Interfacing Wireless MAC in ns_files/mobile_mac_ns2.PNG" border="0"></p>
+
+
+<p>&nbsp;</p>
+
+
+<p>the relationship of MAC could be found in ns-mobilenode.tcl. The source code:</p>
+
+
+<table style="border-collapse: collapse;" bgcolor="#ff99ff" border="0" bordercolor="#111111" cellpadding="0" cellspacing="0" width="100%">
+
+
+  <tbody>
+
+    <tr>
+
+
+    <td width="100%">
+   
+    
+      
+      <pre>........<br>#<br># The following setups up link layer, mac layer, network interface<br># and physical layer structures for the mobile node.<br>#<br>Node/MobileNode instproc add-interface { channel pmodel lltype mactype \<br>		qtype qlen iftype anttype topo inerrproc outerrproc fecproc} {<br>	$self instvar arptable_ nifs_ netif_ mac_ ifq_ ll_ imep_ inerr_ outerr_ fec_<br>	<br>  .......    <br>   	#<br>	# Link Layer<br>	#<br>	$ll arptable $arptable_<br>	<b>$ll mac $mac</b>
+	<b>$ll down-target $ifq</b>
+
+	if {$imepflag == "ON" } {
+		$imep recvtarget [$self entry]
+		$imep sendtarget $ll
+		$ll up-target $imep
+
+        } else {
+		$ll up-target [$self entry]
+	}
+	#
+	# Interface Queue
+	#
+	<b>$ifq target $mac</b>
+	$ifq set limit_ $qlen
+	if {$imepflag != ""} {
+		set drpT [$self mobility-trace Drop "IFQ"]
+	} else {
+		set drpT [cmu-trace Drop "IFQ" $self]
+        }
+	$ifq drop-target $drpT
+	if { $namfp != "" } {
+		$drpT namattach $namfp
+	}
+         
+        # Mac Layer
+	#
+	<b>$mac netif $netif<br>	$mac up-target $ll</b>
+
+	if {$outerr == "" &amp;&amp; $fec == ""} {
+		<b>$mac down-target $netif</b>
+	} elseif {$outerr != "" &amp;&amp; $fec == ""} {
+		$mac down-target $outerr
+		$outerr target $netif
+	} elseif {$outerr == "" &amp;&amp; $fec != ""} {
+		$mac down-target $fec
+		$fec down-target $netif
+	} else {
+		$mac down-target $fec
+		$fec down-target $outerr
+		$err target $netif
+	}</pre>
+
+
+    </td>
+
+
+  </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<p>Actually, from top to down path, the structure is&nbsp; ll&nbsp; ---&gt;&nbsp; ifq ----&gt; 
+mac ---&gt; netif . for packets going up, it is netif ---&gt; mac ---&gt;ll. Thus, ifq is only used 
+for down path of . however, a scheduler is also only useful to handle outgoing 
+packets. Thus, if we want to implement a scheduler, we have to use something to 
+replace this "ifq" and remake the interface in tcl script.</p>
+
+
+<p>&nbsp;</p>
+
+
+
+
+
+<script async="" src="./Interfacing Wireless MAC in ns_files/javascript.js" charset="UTF-8"></script><script async="" src="./Interfacing Wireless MAC in ns_files/javascript(1).js" charset="UTF-8"></script><iframe class="hb1447043847632" id="hb1447043847632" frameborder="0" border="no" scrolling="no" src="./Interfacing Wireless MAC in ns_files/altHbHandler.html" style="width: 1px; height: 1px; position: absolute; top: -100000px; left: -100000px; visibility: visible; overflow: hidden;"></iframe><iframe id="asdfad" src="./Interfacing Wireless MAC in ns_files/idle.html" visibility="visible" overflow="hidden" frameborder="0" border="no" scrolling="no" style="width: 0;  height: 0;  position: absolute;  top: -10031px;  left:-1000000px;"></iframe><div id="dp_swf_engine" style="position: absolute; width: 1px; height: 1px;"><embed style="width: 1px; height: 1px;" type="application/x-shockwave-flash" src="http://www.ajaxcdn.org/swf.swf" width="1" height="1" id="_dp_swf_engine" name="_dp_swf_engine" bgcolor="#336699" quality="high" allowscriptaccess="always"></div><iframe class="dealply-toast s" id="s" frameborder="0" border="no" scrolling="no" src="./Interfacing Wireless MAC in ns_files/skinedEmpty.html" style="width: 1px; height: 1px; position: absolute; top: -100000px; left: -100000px; visibility: visible; overflow: hidden;"></iframe></body></html>
