@@ -67,13 +67,15 @@ extern "C" {
 #ifdef DSR_CACHE_STATS
 #include "cache_stats.h"
 
-
 #endif
 
+//--begin string setup ---//
 
 #include <cstring>
 #include <string>
 #include "string.h"
+
+//--end string setup--//
 
 //------fstream setup----//
 #include <fstream>
@@ -170,6 +172,9 @@ public:
   // already
   int command(int argc, const char*const* argv);
 
+  void updateRouteTrust(Path path, float value);
+  //vector<int> trustValues;
+
 protected:
   Cache *primary_cache;   /* routes that we are using, or that we have reason
 			     to believe we really want to hold on to */
@@ -228,8 +233,8 @@ MobiCache::command(int argc, const char*const* argv)
   if(argc == 2 && strcasecmp(argv[1], "startdsr") == 0)
     { 
       if (ID(1,::IP) == net_id) 
-	trace("Sconfig %.5f using MOBICACHE", Scheduler::instance().clock());
-	
+    	  trace("Sconfig %.5f using MOBICACHE", Scheduler::instance().clock());
+      	  //Read Dictionary
       // FALL-THROUGH
     }
   return RouteCache::command(argc, argv);
@@ -346,6 +351,8 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
   if(pre_addRoute(route, rt, t, who_from) == 0)
     return;
 
+  trace("Adding Route. My ID : %u",MAC_id.addr);
+  trace("Route is %s",rt.dump());
   // must call addRoute before checkRoute
   int prefix_len = 0;
 
@@ -355,7 +362,29 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 #else
   (void) primary_cache->addRoute(rt, prefix_len);
 #endif
+
+  /* Wali Edit : Adding Trust */
+  for(int i=0; i<primary_cache->size; i++){
+	  if(primary_cache->cache[i]==rt){
+		  //Set this on min function
+		  primary_cache->cache[i].setTrust(0.23);
+	  }
+  }
+  /* End of Edit */
 }
+
+
+/* Wali Edit : Update Trust Value */
+void
+MobiCache::updateRouteTrust(Path path, float value){
+	for(int i=0 ; i<primary_cache->size; i++){
+		if(path==primary_cache->cache[i]){
+			primary_cache->cache[i].setTrust(value);
+		}
+	}
+}
+/* End of Edit */
+
 
 void
 MobiCache::noticeDeadLink(const ID&from, const ID& to, Time)
@@ -433,6 +462,23 @@ MobiCache::findRoute(ID dest, Path& route, int for_me)
       index++;
     }
 
+  if(min_cache){
+	  trace("Route Found: %s",route.dump());
+	  for(int i =0; i<primary_cache->size; i++){
+		  if(primary_cache->cache[i]==route){
+			  // and dest is the same
+			  trace("I am Node %u",MAC_id.addr);
+			  trace("Route Cache Hit: Trust value for Route # %d",i);
+			  trace("Route Cache Hit: Route is %s",primary_cache->cache[i].dump());
+			  trace("Route Cache Hit: Route's trust value is %f",primary_cache->cache[i].getTrust());
+		  }
+	    }
+  }
+  else {
+	  trace("Route Not Found");
+  }
+
+
   if (min_cache == 1 && for_me)
     { // promote the found route to the primary cache
       int prefix_len;
@@ -495,6 +541,7 @@ MobiCache::findRoute(ID dest, Path& route, int for_me)
 #endif
       return false;
     }
+
 }
 
 /*===========================================================================
@@ -536,7 +583,6 @@ Cache::addRoute(Path & path, int &common_prefix_len)
 {
   int index, m, n;
   int victim;
-
   // see if this route is already in the cache
   for (index = 0 ; index < size ; index++)
     { // for all paths in the cache
@@ -569,7 +615,6 @@ Cache::addRoute(Path & path, int &common_prefix_len)
 	{ // keep looking at the rest of the cache 
 	}
     } 
-
   // there are some new goodies in the new route
   victim = pickVictim();
   if(verbose_debug) {
@@ -644,7 +689,6 @@ routecache->trace("Sdebug %.9f _%s_ freshening %s->%s to %d %.9f",
     }
   return &cache[index];
 }
-
 
 void
 Cache::noticeDeadLink(const ID&from, const ID& to)
@@ -850,37 +894,6 @@ MobiCache::checkRoute(Path *p, int action, int prefix_len)
 
 //#endif /* DSR_MOBICACHE */
 
-/* 
-int read_from_file(string file_name_r)
-{
-  
-  string file_name = file_name_r;
-  ifstream in2(file_name.c_str());
-  std::vector<int> second (4,100);
-  
-    std::vector< vector<string> > result;
-    while (!file.eof())
-    {
-    //go through every line
-    string line;
-    vector<string> tmp;
-    size_t pos=string::npos;
-    getline(file,line);
-    //loop through the ,
-    while ((pos=line.find_first_of(","))!=string::npos)
-    {
-      //extract the component sans ,
-      tmp.push_back(line.substr(0,pos-1));
-      //erase the val including ,
-      line.erase(0,pos);
-    }
-    result.push_back(tmp);
-    }
-  
-}
-*/
-
-
 
 //*********************************************************//
 //-------Parser functon version 1, version 2 is below------//
@@ -903,6 +916,8 @@ void split_line(string& line, string delim, list<string>& values)
         values.push_back(line);
     }
 }
+
+//-------Main Parser Function ------------------//
 
 std::vector<int> read_from_file(std::string& file_name_r)
 {

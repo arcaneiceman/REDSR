@@ -134,6 +134,8 @@ private:
   int off_ll_;
   int off_ip_;
   int off_sr_;
+  // flag for malicious node
+  bool malicious;
 
   // will eventually need to handle multiple infs, but this is okay for
   // now 1/28/98 -dam

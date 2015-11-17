@@ -129,6 +129,8 @@ Path::Path(int route_len, const ID *route)
       len = 0;
     }
   cur_index = 0;
+  trustValue = 0;
+  printf("Path made 1");
 }
 
 Path::Path()
@@ -136,6 +138,7 @@ Path::Path()
   path = new ID[MAX_SR_LEN];
   len = 0;
   cur_index = 0;
+  trustValue = 0;
 }
 
 
@@ -149,6 +152,7 @@ Path::Path(const struct sr_addr *addrs, int len)
 
   this->len = len;
   cur_index = 0;
+  trustValue = 0;
 }
 
 Path::Path(struct hdr_sr *srh)
@@ -168,6 +172,9 @@ Path::Path(struct hdr_sr *srh)
 	
 	for (int i = 0 ; i < len ; i++)
 		path[i] = ID(srh->addrs()[i]);
+
+	//trustValue = 0;
+	//printf("Path made 3");
 }
 
 void
@@ -196,6 +203,8 @@ Path::Path(const Path& old)
     }
   cur_index = old.cur_index;
   path_owner = old.path_owner;
+  trustValue = 0;
+  printf("Path made 4");
 }
 
 Path::~Path()
@@ -283,6 +292,7 @@ Path::copy() const
   Path p(len,path);
   p.cur_index = cur_index;
   p.path_owner = path_owner;
+  p.trustValue = trustValue;
   return p;
 }
 
@@ -294,6 +304,7 @@ Path::copyInto(Path& to) const
   for (int c = 0 ; c < len ; c++)
     to.path[c] = path[c];  
   to.path_owner = path_owner;
+  to.trustValue = trustValue;
 }
 
 Path

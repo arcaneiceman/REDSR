@@ -167,12 +167,16 @@ public:
   char *dump() const;
   inline ID &owner() {return path_owner;}
 
+  void setTrust(float val) { trustValue = val;}
+  float getTrust(){return trustValue;}
+
   void checkpath(void) const;
 private:
   int len;
   int cur_index;
   ID* path;
   ID path_owner;
+  float trustValue;
 };
 
 void compressPath(Path& path);
