@@ -67,15 +67,12 @@ extern "C" {
 #ifdef DSR_CACHE_STATS
 #include "cache_stats.h"
 
-<<<<<<< HEAD
-//------fstream setup----//
 #include <fstream>
 #include <iostream>
 #include <vector>
 
 
-=======
->>>>>>> DSR-File-Reader-Parser
+
 #endif
 
 //--begin string setup ---//
@@ -189,12 +186,6 @@ public:
   int command(int argc, const char*const* argv);
 
   void updateRouteTrust(Path path, float value);
-<<<<<<< HEAD
-  //vector<int> trustValues;
-=======
-
-
->>>>>>> DSR-File-Reader-Parser
 
 protected:
   Cache *primary_cache;   /* routes that we are using, or that we have reason
@@ -259,10 +250,6 @@ MobiCache::command(int argc, const char*const* argv)
     { 
       if (ID(1,::IP) == net_id) 
     	  trace("Sconfig %.5f using MOBICACHE", Scheduler::instance().clock());
-<<<<<<< HEAD
-      	  //Read Dictionary
-=======
-
       /* Wali Edit Reading Dictionary */
       std::string name ("Node-");
       std::ostringstream stm ;
@@ -277,7 +264,6 @@ MobiCache::command(int argc, const char*const* argv)
     	  cout<< "Node " << i << "has a trust value of " << trustValues[i] << endl;
       }
       /* End of Wali Edit */
->>>>>>> DSR-File-Reader-Parser
       // FALL-THROUGH
     }
   return RouteCache::command(argc, argv);
@@ -407,12 +393,6 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 #endif
 
   /* Wali Edit : Adding Trust */
-<<<<<<< HEAD
-  for(int i=0; i<primary_cache->size; i++){
-	  if(primary_cache->cache[i]==rt){
-		  //Set this on min function
-		  primary_cache->cache[i].setTrust(0.23);
-=======
 
   //Finding Min of Path
   double minTrust = 1.0;
@@ -429,7 +409,6 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 	  if(primary_cache->cache[i]==rt){
 		  //Set this on min function
 		  primary_cache->cache[i].setTrust(minTrust);
->>>>>>> DSR-File-Reader-Parser
 	  }
   }
   /* End of Edit */
