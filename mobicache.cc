@@ -93,6 +93,10 @@ using std::endl;
 
 //---end fstream setup ----//
 
+
+std::vector<double> read_from_file(std::string& file_name_r);
+
+
 /* invariants
 
    - no path contains an id more than once
@@ -111,6 +115,9 @@ bool cache_ignore_hints = false;     // ignore all hints?
 bool cache_use_overheard_routes = true; 
 // if we are A, and we over hear a rt Z Y (X) W V U, do we add route
 // A X W V U to the cache?
+
+
+
 
 
 /*===============================================================
@@ -173,13 +180,18 @@ public:
   int command(int argc, const char*const* argv);
 
   void updateRouteTrust(Path path, float value);
-  //vector<int> trustValues;
+
+
 
 protected:
   Cache *primary_cache;   /* routes that we are using, or that we have reason
 			     to believe we really want to hold on to */
   Cache *secondary_cache; /* routes we've learned via a speculative process
 			     that might not pan out */
+
+  /* Wali Edit Trust Vector   */
+  std::vector<double> trustValues;
+  /* End of Edit */
 
 #ifdef DSR_CACHE_STATS
   void periodic_checkCache(void);
@@ -234,7 +246,21 @@ MobiCache::command(int argc, const char*const* argv)
     { 
       if (ID(1,::IP) == net_id) 
     	  trace("Sconfig %.5f using MOBICACHE", Scheduler::instance().clock());
-      	  //Read Dictionary
+
+      /* Wali Edit Reading Dictionary */
+      std::string name ("Node-");
+      std::ostringstream stm ;
+      stm << MAC_id.addr ;
+      name += stm.str();
+      name += ".rel";
+      trustValues = read_from_file(name);
+      cout << "Name is " << name << endl;
+
+      cout << "For Node " << stm.str() <<endl;
+      for (int i=0; i<trustValues.size(); i++){
+    	  cout<< "Node " << i << "has a trust value of " << trustValues[i] << endl;
+      }
+      /* End of Wali Edit */
       // FALL-THROUGH
     }
   return RouteCache::command(argc, argv);
@@ -364,10 +390,22 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 #endif
 
   /* Wali Edit : Adding Trust */
+
+  //Finding Min of Path
+  double minTrust = 1.0;
+  for(int i=0; i<rt.length(); i++ ){
+	  long nodeID = rt[i].addr;
+	  double nodeTrust = trustValues[nodeID];
+	  if(nodeTrust < minTrust){
+		  minTrust = nodeTrust;
+	  }
+  }
+  trace("Min Trust for this Route is %f", minTrust);
+
   for(int i=0; i<primary_cache->size; i++){
 	  if(primary_cache->cache[i]==rt){
 		  //Set this on min function
-		  primary_cache->cache[i].setTrust(0.23);
+		  primary_cache->cache[i].setTrust(minTrust);
 	  }
   }
   /* End of Edit */
@@ -569,7 +607,7 @@ Cache::searchRoute(const ID& dest, int& i, Path &path, int &index)
 {
   for (; index < size; index++)
     for (int n = 0 ; n < cache[index].length(); n++)
-      if (cache[index][n] == dest) 
+      if (cache[index][n] == dest && cache[index].getTrust() >= 0.5d)
 	{
 	  i = n;
 	  path = cache[index];
@@ -919,7 +957,7 @@ void split_line(string& line, string delim, list<string>& values)
 
 //-------Main Parser Function ------------------//
 
-std::vector<int> read_from_file(std::string& file_name_r)
+std::vector<double> read_from_file(std::string& file_name_r)
 {
     //assign the received file name to a variable that will be used from here on out
     string file_name = file_name_r;
@@ -932,7 +970,7 @@ std::vector<int> read_from_file(std::string& file_name_r)
     list<string> values;
     
     //vecotr that wil lbe used to return parsed values
-    std::vector<int> parsed_vals;
+    std::vector<double> parsed_vals;
     
     
     while ( file.good() )
@@ -956,7 +994,7 @@ std::vector<int> read_from_file(std::string& file_name_r)
         double d;
         d = strtod(tmp.c_str(), NULL);
         parsed_vals.push_back(d);
-	//cout << "Double val: " << right << showpoint << d << endl;
+        //cout << "Double val: " << right << showpoint << d << endl;
     }
     
     return parsed_vals;

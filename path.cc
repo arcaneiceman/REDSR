@@ -130,7 +130,6 @@ Path::Path(int route_len, const ID *route)
     }
   cur_index = 0;
   trustValue = 0;
-  printf("Path made 1");
 }
 
 Path::Path()
@@ -204,7 +203,6 @@ Path::Path(const Path& old)
   cur_index = old.cur_index;
   path_owner = old.path_owner;
   trustValue = 0;
-  printf("Path made 4");
 }
 
 Path::~Path()
