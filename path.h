@@ -176,7 +176,7 @@ private:
   int cur_index;
   ID* path;
   ID path_owner;
-  float trustValue;
+  double trustValue;
 };
 
 void compressPath(Path& path);

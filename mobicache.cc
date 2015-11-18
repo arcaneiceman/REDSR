@@ -67,13 +67,43 @@ extern "C" {
 #ifdef DSR_CACHE_STATS
 #include "cache_stats.h"
 
+<<<<<<< HEAD
 //------fstream setup----//
 #include <fstream>
 #include <iostream>
 #include <vector>
 
 
+=======
+>>>>>>> DSR-File-Reader-Parser
 #endif
+
+//--begin string setup ---//
+
+#include <cstring>
+#include <string>
+#include "string.h"
+
+//--end string setup--//
+
+//------fstream setup----//
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <list>
+
+using namespace std;
+using std::string;
+using std::ostream;
+using std::list;
+using std::endl;
+
+//---end fstream setup ----//
+
+
+std::vector<double> read_from_file(std::string& file_name_r);
 
 
 /* invariants
@@ -94,6 +124,9 @@ bool cache_ignore_hints = false;     // ignore all hints?
 bool cache_use_overheard_routes = true; 
 // if we are A, and we over hear a rt Z Y (X) W V U, do we add route
 // A X W V U to the cache?
+
+
+
 
 
 /*===============================================================
@@ -156,13 +189,22 @@ public:
   int command(int argc, const char*const* argv);
 
   void updateRouteTrust(Path path, float value);
+<<<<<<< HEAD
   //vector<int> trustValues;
+=======
+
+
+>>>>>>> DSR-File-Reader-Parser
 
 protected:
   Cache *primary_cache;   /* routes that we are using, or that we have reason
 			     to believe we really want to hold on to */
   Cache *secondary_cache; /* routes we've learned via a speculative process
 			     that might not pan out */
+
+  /* Wali Edit Trust Vector   */
+  std::vector<double> trustValues;
+  /* End of Edit */
 
 #ifdef DSR_CACHE_STATS
   void periodic_checkCache(void);
@@ -217,7 +259,25 @@ MobiCache::command(int argc, const char*const* argv)
     { 
       if (ID(1,::IP) == net_id) 
     	  trace("Sconfig %.5f using MOBICACHE", Scheduler::instance().clock());
+<<<<<<< HEAD
       	  //Read Dictionary
+=======
+
+      /* Wali Edit Reading Dictionary */
+      std::string name ("Node-");
+      std::ostringstream stm ;
+      stm << MAC_id.addr ;
+      name += stm.str();
+      name += ".rel";
+      trustValues = read_from_file(name);
+      cout << "Name is " << name << endl;
+
+      cout << "For Node " << stm.str() <<endl;
+      for (int i=0; i<trustValues.size(); i++){
+    	  cout<< "Node " << i << "has a trust value of " << trustValues[i] << endl;
+      }
+      /* End of Wali Edit */
+>>>>>>> DSR-File-Reader-Parser
       // FALL-THROUGH
     }
   return RouteCache::command(argc, argv);
@@ -347,10 +407,29 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 #endif
 
   /* Wali Edit : Adding Trust */
+<<<<<<< HEAD
   for(int i=0; i<primary_cache->size; i++){
 	  if(primary_cache->cache[i]==rt){
 		  //Set this on min function
 		  primary_cache->cache[i].setTrust(0.23);
+=======
+
+  //Finding Min of Path
+  double minTrust = 1.0;
+  for(int i=0; i<rt.length(); i++ ){
+	  long nodeID = rt[i].addr;
+	  double nodeTrust = trustValues[nodeID];
+	  if(nodeTrust < minTrust){
+		  minTrust = nodeTrust;
+	  }
+  }
+  trace("Min Trust for this Route is %f", minTrust);
+
+  for(int i=0; i<primary_cache->size; i++){
+	  if(primary_cache->cache[i]==rt){
+		  //Set this on min function
+		  primary_cache->cache[i].setTrust(minTrust);
+>>>>>>> DSR-File-Reader-Parser
 	  }
   }
   /* End of Edit */
@@ -552,7 +631,7 @@ Cache::searchRoute(const ID& dest, int& i, Path &path, int &index)
 {
   for (; index < size; index++)
     for (int n = 0 ; n < cache[index].length(); n++)
-      if (cache[index][n] == dest) 
+      if (cache[index][n] == dest && cache[index].getTrust() >= 0.5d)
 	{
 	  i = n;
 	  path = cache[index];
@@ -876,8 +955,100 @@ MobiCache::checkRoute(Path *p, int action, int prefix_len)
 #endif /* DSR_CACHE_STATS */
 
 //#endif /* DSR_MOBICACHE */
-/*int read_from_file(char file_name_r)
+
+//*********************************************************//
+//-------Parser functon version 1, version 2 is below------//
+//********************************************************//
+///*
+
+//The function to split the lines up that will be used by the parser. Can also be used by itself. 
+void split_line(string& line, string delim, list<string>& values)
 {
-  
-  
-}*/
+    size_t pos = 0;
+    while ((pos = line.find(delim, (pos + 1))) != string::npos) 
+    {
+        string p = line.substr(0, pos);
+        values.push_back(p);
+        line = line.substr(pos + 1);
+    }
+
+    if (!line.empty()) 
+    {
+        values.push_back(line);
+    }
+}
+
+//-------Main Parser Function ------------------//
+
+std::vector<double> read_from_file(std::string& file_name_r)
+{
+    //assign the received file name to a variable that will be used from here on out
+    string file_name = file_name_r;
+    
+    //open the file
+    ifstream file (file_name.c_str()); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
+    
+    //declare variable that will be used by iterators and parsers 
+    string value;
+    list<string> values;
+    
+    //vecotr that wil lbe used to return parsed values
+    std::vector<double> parsed_vals;
+    
+    
+    while ( file.good() )
+    {
+        getline ( file, value, ',' ); // read a string until next comma: http://www.cplusplus.com/reference/string/getline/
+        if (value.find('\n') != string::npos) 
+	{
+            split_line(value, "\n", values);
+        } 
+        
+        else 
+	{
+            values.push_back(value);
+        }
+    }
+
+    list<string>::const_iterator it = values.begin();
+    for (it = values.begin(); it != values.end(); it++) 
+    {
+        string tmp = *it;
+        double d;
+        d = strtod(tmp.c_str(), NULL);
+        parsed_vals.push_back(d);
+        //cout << "Double val: " << right << showpoint << d << endl;
+    }
+    
+    return parsed_vals;
+}
+
+//*/
+
+//*******************************************************//
+//---------Parser Function Version 2--------------------//
+//******************************************************//
+
+/*
+std::vector<std::string> read_file(const std::string& path, std::string& file_name_r)
+ {
+    std::ifstream file(file_name_r);
+
+    if (!file.is_open())
+    {
+        std::cerr << "Unable to open file" << "\n";
+        std::exit(-1);
+    }
+
+    std::vector<string> result;//this vector will be returned 
+    std::string token;
+
+    while (std::getline(file, token, ','))
+    {
+        result.push_back(token);
+    }
+
+    return result;
+}
+
+*/
