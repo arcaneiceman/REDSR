@@ -64,6 +64,9 @@ extern "C" {
 #include <float.h>
 }
 
+
+#include <iostream>
+#include <vector>
 #include <object.h>
 #include <agent.h>
 #include <trace.h>
@@ -235,6 +238,10 @@ void
 DSRAgent::buildTrust(){
 	trace("Hello World");
 	//Here we must go through routes in the route cache and send them a bunch on packets
+	Path* cacheEntries = new new Path[30];
+	int numOfEntries;
+
+
 }
 
 

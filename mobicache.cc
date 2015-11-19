@@ -92,15 +92,16 @@ extern "C" {
 #include <list>
 
 using namespace std;
-using std::string;
+/*using std::string;
 using std::ostream;
 using std::list;
-using std::endl;
+using std::endl;*/
 
 //---end fstream setup ----//
 
 
-std::vector<double> read_from_file(std::string& file_name_r);
+//std::vector<double> read_from_file(std::string& file_name_r);
+std::vector<double> read_file(std::string& file_name_r);
 
 
 /* invariants
@@ -256,7 +257,7 @@ MobiCache::command(int argc, const char*const* argv)
       stm << MAC_id.addr ;
       name += stm.str();
       name += ".rel";
-      trustValues = read_from_file(name);
+      trustValues = read_file(name);
       cout << "Name is " << name << endl;
 
       cout << "For Node " << stm.str() <<endl;
@@ -938,7 +939,7 @@ MobiCache::checkRoute(Path *p, int action, int prefix_len)
 //*********************************************************//
 //-------Parser functon version 1, version 2 is below------//
 //********************************************************//
-///*
+/*
 
 //The function to split the lines up that will be used by the parser. Can also be used by itself. 
 void split_line(string& line, string delim, list<string>& values)
@@ -1002,16 +1003,16 @@ std::vector<double> read_from_file(std::string& file_name_r)
     return parsed_vals;
 }
 
-//*/
+*/
 
 //*******************************************************//
 //---------Parser Function Version 2--------------------//
 //******************************************************//
 
-/*
-std::vector<std::string> read_file(const std::string& path, std::string& file_name_r)
+
+std::vector<double> read_file(std::string& file_name_r)
  {
-    std::ifstream file(file_name_r);
+    std::ifstream file(file_name_r.c_str());
 
     if (!file.is_open())
     {
@@ -1019,15 +1020,17 @@ std::vector<std::string> read_file(const std::string& path, std::string& file_na
         std::exit(-1);
     }
 
-    std::vector<string> result;//this vector will be returned 
+    std::vector<double> result;//this vector will be returned
     std::string token;
 
     while (std::getline(file, token, ','))
     {
-        result.push_back(token);
+    	double d;
+    	d = strtod(token.c_str(), NULL);
+        result.push_back(d);
     }
 
     return result;
 }
 
-*/
+

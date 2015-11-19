@@ -99,6 +99,10 @@ public:
   virtual int command(int argc, const char*const* argv);
   void trace(char* fmt, ...);
 
+  /*Wali Edits */
+
+  virtual void getRoutes(Path& cacheContent, int& size);
+
   // *******************************************************
 
   int pre_addRoute(const Path& route, Path &rt,
