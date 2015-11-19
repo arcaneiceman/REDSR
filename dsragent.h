@@ -266,6 +266,11 @@ private:
   void testinit();
   void trace(char* fmt, ...);
 
+  /*
+   * Wali Edit : Trust Building Function
+   */
+  void buildTrust();
+
   friend void XmitFailureCallback(Packet *pkt, void *data);
   friend void XmitFlowFailureCallback(Packet *pkt, void *data);
   friend int FilterFailure(Packet *p, void *data);

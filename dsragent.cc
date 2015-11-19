@@ -228,6 +228,17 @@ XmitFlowFailureCallback(Packet *pkt, void *data)
   agent->xmitFlowFailed(pkt);
 }
 
+/*
+ * Wali Edits : Trust Building Function
+ */
+void
+DSRAgent::buildTrust(){
+	trace("Hello World");
+	//Here we must go through routes in the route cache and send them a bunch on packets
+}
+
+
+
 
 /*===========================================================================
   SendBuf management and helpers
@@ -457,6 +468,17 @@ DSRAgent::command(int argc, const char*const* argv)
 	  malicious = true;
 	  return TCL_OK;
 	}
+      if (strcasecmp(argv[1], "malicious") == 0)
+      	{
+          	  trace("Malicious set to true");
+      	  malicious = true;
+      	  return TCL_OK;
+      	}
+      if (strcasecmp(argv[1], "buildtrust") == 0)
+		{
+    	  buildTrust();
+		  return TCL_OK;
+		}
       if (strcasecmp(argv[1], "reset") == 0)
 	{
 	  Terminate();

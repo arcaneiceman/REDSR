@@ -201,6 +201,25 @@ $ns_ at 0.0 "[$node_(1) set ragent_] mac-addr 1"
 $ns_ at 0.0 "[$node_(2) set ragent_] mac-addr 2"
 $ns_ at 0.0 "[$node_(3) set ragent_] mac-addr 3"
 
+#Schedule Building trust
+$ns_ at 3.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 6.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 9.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 12.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 15.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 18.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 21.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 24.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 27.0 "[$node_(0) set ragent_] buildtrust"
+$ns_ at 30.0 "[$node_(0) set ragent_] buildtrust"
+
+
+$ns_ at .0 "[$node_(0) set ragent_] mac-addr 0"
+$ns_ at 0.0 "[$node_(1) set ragent_] mac-addr 1"
+$ns_ at 0.0 "[$node_(2) set ragent_] mac-addr 2"
+$ns_ at 0.0 "[$node_(3) set ragent_] mac-addr 3"
+
+
 for {set i 0} {$i < $val(nn)} {incr i} {
 	$ns_ initial_node_pos $node_($i) 5
 }
