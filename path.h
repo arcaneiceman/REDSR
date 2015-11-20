@@ -170,13 +170,24 @@ public:
   void setTrust(float val) { trustValue = val;}
   float getTrust(){return trustValue;}
 
+  void pktSentWithThisRoute(){ pktsSent++;}
+  void pktAckWithThisRoute(){pktsAcked++;}
+
+  long getPktsSent(){ return pktsSent;}
+  long getPktsAcked(){ return pktsAcked;}
+
   void checkpath(void) const;
 private:
   int len;
   int cur_index;
   ID* path;
   ID path_owner;
+
+  /* Wali Edits : Trust Variables */
   double trustValue;
+  long pktsSent;
+  long pktsAcked;
+
 };
 
 void compressPath(Path& path);

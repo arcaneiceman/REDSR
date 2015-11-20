@@ -101,8 +101,9 @@ public:
 
   /*Wali Edits */
 
-  virtual void getRoutes(Path& cacheContent, int& size);
+  virtual void getRoutes(Path cacheContent[],int& size);
 
+  /* End of Edits */
   // *******************************************************
 
   int pre_addRoute(const Path& route, Path &rt,

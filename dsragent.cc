@@ -236,12 +236,27 @@ XmitFlowFailureCallback(Packet *pkt, void *data)
  */
 void
 DSRAgent::buildTrust(){
-	trace("Hello World");
+	trace("Building Trust....");
 	//Here we must go through routes in the route cache and send them a bunch on packets
-	Path* cacheEntries = new new Path[30];
+	Path cacheEntries[30];
 	int numOfEntries;
+	route_cache->getRoutes(cacheEntries,numOfEntries);
+	cout << "Num of Entries is " << numOfEntries << endl;
+	for(int i=0; i<numOfEntries; i++){
+		if(cacheEntries[i].length()==0){
+			continue;
+		}
+		cout << "Route is " << cacheEntries[i].dump() << endl;
+		trace("Route %s: blah blah blah",cacheEntries[i].dump());
+	/*	trace(" %u is the destination",cacheEntries[i][cacheEntries[i].length()-1].addr);
+		trace(" %u is my net id ",net_id.addr);*/
+		SRPacket pingPacket;
+		pingPacket.dest = cacheEntries[i][cacheEntries[i].length()-1];
+		pingPacket.src = net_id;
+		pingPacket.route = cacheEntries[i];
 
-
+		//sendOutPacketWithRoute(pingPacket, false);
+	}
 }
 
 
@@ -1300,7 +1315,7 @@ DSRAgent::sendOutPacketWithRoute(SRPacket& p, bool fresh, Time delay)
      //  is false then our caller wants us use a path with the index
  //  set as it currently isk
 {
-	trace ("Sending out Packet! My id : %u", MAC_id.addr);
+  trace ("Sending out Packet! My id : %u", MAC_id.addr);
   hdr_sr *srh =  hdr_sr::access(p.pkt);
   hdr_cmn *cmnh = hdr_cmn::access(p.pkt);
 

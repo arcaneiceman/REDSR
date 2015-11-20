@@ -188,6 +188,8 @@ public:
 
   void updateRouteTrust(Path path, float value);
 
+  void getRoutes(Path cacheContent[], int& size);
+
 protected:
   Cache *primary_cache;   /* routes that we are using, or that we have reason
 			     to believe we really want to hold on to */
@@ -416,7 +418,9 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 }
 
 
-/* Wali Edit : Update Trust Value */
+/*
+ * Wali Edit : Trust Functions
+ */
 void
 MobiCache::updateRouteTrust(Path path, float value){
 	for(int i=0 ; i<primary_cache->size; i++){
@@ -425,6 +429,19 @@ MobiCache::updateRouteTrust(Path path, float value){
 		}
 	}
 }
+
+void MobiCache::getRoutes(Path cacheContent[], int& size){
+	size = primary_cache->size;
+	/*cacheContent = new Path[primary_cache->size];*/
+	for(int i=0; i<primary_cache->size; i++){
+		cacheContent[i] = primary_cache->cache[i];
+	}
+
+
+}
+
+
+
 /* End of Edit */
 
 

@@ -130,6 +130,8 @@ Path::Path(int route_len, const ID *route)
     }
   cur_index = 0;
   trustValue = 0;
+  pktsSent = 0;
+  pktsAcked = 0;
 }
 
 Path::Path()
@@ -138,6 +140,8 @@ Path::Path()
   len = 0;
   cur_index = 0;
   trustValue = 0;
+  pktsSent = 0;
+  pktsAcked = 0;
 }
 
 
@@ -152,6 +156,8 @@ Path::Path(const struct sr_addr *addrs, int len)
   this->len = len;
   cur_index = 0;
   trustValue = 0;
+  pktsSent = 0;
+  pktsAcked = 0;
 }
 
 Path::Path(struct hdr_sr *srh)
@@ -174,6 +180,8 @@ Path::Path(struct hdr_sr *srh)
 
 	//trustValue = 0;
 	//printf("Path made 3");
+	//pktsSent = 0;
+	//pktsAcked = 0;
 }
 
 void

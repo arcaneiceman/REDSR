@@ -236,6 +236,7 @@ for {set i 0} {$i < $val(nn)} {incr i} {
 # Setup traffic flow between nodes
 # TCP connections between node_(0) and node_(1)
 
+
 set tcp [new Agent/TCP]
 $tcp set class_ 2
 set sink [new Agent/TCPSink]
@@ -245,6 +246,7 @@ $ns_ connect $tcp $sink
 set ftp [new Application/FTP]
 $ftp attach-agent $tcp
 $ns_ at 3.0 "$ftp start" 
+
 
 #
 # Tell nodes when the simulation ends

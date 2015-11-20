@@ -148,6 +148,9 @@ RouteCache::trace(char* fmt, ...)
   va_end(ap);
 }
 
+void RouteCache::getRoutes(Path cacheContent[], int& size){
+
+}
 
 void
 RouteCache::dump(FILE *out)
