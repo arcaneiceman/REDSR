@@ -246,8 +246,8 @@ DSRAgent::buildTrust(){
 		if(cacheEntries[i].length()==0){
 			continue;
 		}
-		cout << "Route is " << cacheEntries[i].dump() << endl;
 		trace("Route %s: blah blah blah",cacheEntries[i].dump());
+		trace("Packets sent %d and Packets Acks back %d",cacheEntries[i].getPktsSent(),cacheEntries[i].getPktsAcked());
 	/*	trace(" %u is the destination",cacheEntries[i][cacheEntries[i].length()-1].addr);
 		trace(" %u is my net id ",net_id.addr);*/
 		SRPacket pingPacket;

@@ -8158,7 +8158,9 @@ r 5.995750533 _0_ MAC  --- 0 CTS 38 [2434 0 0 0]
 s 5.995760533 _0_ MAC  --- 219 tcp 1118 [13a 2 0 800] ------- [0:0 1:0 32 2] [112 0] 0 0
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 r 6.004704906 _2_ MAC  --- 219 tcp 1060 [13a 2 0 800] ------- [0:0 1:0 32 2] [112 0] 1 0
 s 6.004714906 _2_ MAC  --- 0 ACK 38 [0 0 0 0] 
 r 6.004729906 _2_ RTR  --- 219 tcp 1060 [13a 2 0 800] ------- [0:0 1:0 32 2] [112 0] 1 0
@@ -16373,7 +16375,9 @@ r 8.995468992 _2_ MAC  --- 0 CTS 38 [2434 2 0 0]
 s 8.995478992 _2_ MAC  --- 449 tcp 1118 [13a 1 2 800] ------- [0:0 1:0 31 1] [224 0] 1 0
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 r 9.004423364 _1_ MAC  --- 449 tcp 1060 [13a 1 2 800] ------- [0:0 1:0 31 1] [224 0] 2 0
 s 9.004433364 _1_ MAC  --- 0 ACK 38 [0 2 0 0] 
 r 9.004448364 _1_ RTR  --- 449 tcp 1060 [13a 1 2 800] ------- [0:0 1:0 31 1] [224 0] 2 0
@@ -24258,7 +24262,9 @@ r 11.999846916 _2_ MAC  --- 0 RTS 44 [62e 2 1 0]
 s 11.999856916 _2_ MAC  --- 0 CTS 38 [4f4 1 0 0] 
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 r 12.000161288 _1_ MAC  --- 0 CTS 38 [4f4 1 0 0] 
 s 12.000171288 _1_ MAC  --- 671 ack 118 [13a 2 1 800] ------- [1:0 0:0 32 2] [332 0] 0 0
 r 12.001115661 _2_ MAC  --- 671 ack 60 [13a 2 1 800] ------- [1:0 0:0 32 2] [332 0] 1 0
@@ -32130,7 +32136,9 @@ r 14.995861486 _0_ MAC  --- 0 CTS 38 [2434 0 0 0]
 s 14.995871486 _0_ MAC  --- 913 tcp 1118 [13a 2 0 800] ------- [0:0 1:0 32 2] [454 0] 0 0
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 r 15.004815858 _2_ MAC  --- 913 tcp 1060 [13a 2 0 800] ------- [0:0 1:0 32 2] [454 0] 1 0
 s 15.004825858 _2_ MAC  --- 0 ACK 38 [0 0 0 0] 
 r 15.004840858 _2_ RTR  --- 913 tcp 1060 [13a 2 0 800] ------- [0:0 1:0 32 2] [454 0] 1 0
@@ -40409,7 +40417,9 @@ r 17.999593460 _0_ MAC  --- 0 CTS 38 [2434 0 0 0]
 s 17.999603460 _0_ MAC  --- 1137 tcp 1118 [13a 2 0 800] ------- [0:0 1:0 32 2] [572 0] 0 0
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 r 18.008547833 _2_ MAC  --- 1137 tcp 1060 [13a 2 0 800] ------- [0:0 1:0 32 2] [572 0] 1 0
 s 18.008557833 _2_ MAC  --- 0 ACK 38 [0 0 0 0] 
 r 18.008572833 _2_ RTR  --- 1137 tcp 1060 [13a 2 0 800] ------- [0:0 1:0 32 2] [572 0] 1 0
@@ -48612,7 +48622,9 @@ r 20.997931736 _0_ MAC  --- 0 CTS 38 [2434 0 0 0]
 s 20.997941736 _0_ MAC  --- 1415 tcp 1118 [13a 2 0 800] ------- [0:0 1:0 32 2] [667 0] 0 0
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 r 21.006886109 _2_ MAC  --- 1415 tcp 1060 [13a 2 0 800] ------- [0:0 1:0 32 2] [667 0] 1 0
 s 21.006896109 _2_ MAC  --- 0 ACK 38 [0 0 0 0] 
 r 21.006911109 _2_ RTR  --- 1415 tcp 1060 [13a 2 0 800] ------- [0:0 1:0 32 2] [667 0] 1 0
@@ -56936,7 +56948,9 @@ r 23.999850493 _0_ MAC  --- 0 RTS 44 [62e 0 2 0]
 s 23.999860493 _0_ MAC  --- 0 CTS 38 [4f4 2 0 0] 
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 r 24.000164866 _2_ MAC  --- 0 CTS 38 [4f4 2 0 0] 
 s 24.000174866 _2_ MAC  --- 1664 ack 118 [13a 0 2 800] ------- [1:0 0:0 31 0] [777 0] 1 0
 r 24.001119239 _0_ MAC  --- 1664 ack 60 [13a 0 2 800] ------- [1:0 0:0 31 0] [777 0] 2 0
@@ -64772,7 +64786,9 @@ r 26.995771610 _2_ MAC  --- 0 CTS 38 [2434 2 0 0]
 s 26.995781610 _2_ MAC  --- 1866 tcp 1118 [13a 1 2 800] ------- [0:0 1:0 31 1] [890 0] 1 0
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 r 27.004725982 _1_ MAC  --- 1866 tcp 1060 [13a 1 2 800] ------- [0:0 1:0 31 1] [890 0] 2 0
 s 27.004735982 _1_ MAC  --- 0 ACK 38 [0 2 0 0] 
 r 27.004750982 _1_ RTR  --- 1866 tcp 1060 [13a 1 2 800] ------- [0:0 1:0 31 1] [890 0] 2 0
@@ -72727,7 +72743,9 @@ r 29.999821397 _0_ MAC  --- 0 RTS 44 [62e 0 2 0]
 s 29.999831397 _0_ MAC  --- 0 CTS 38 [4f4 2 0 0] 
 Building Trust....
 Route [(0) 3 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 Route [(0) 2 1 ]: blah blah blah
+Packets sent 0 and Packets Acks back 0
 D 30.000000000 _1_ IFQ  END 2092 ack 60 [0 2 1 800] ------- [1:0 0:0 32 2] [992 0] 0 0
 D 30.000000000 _1_ IFQ  END 2093 ack 60 [0 2 1 800] ------- [1:0 0:0 32 2] [993 0] 0 0
 D 30.000000000 _1_ IFQ  END 2094 ack 60 [0 2 1 800] ------- [1:0 0:0 32 2] [994 0] 0 0
