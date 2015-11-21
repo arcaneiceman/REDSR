@@ -186,9 +186,14 @@ public:
   // already
   int command(int argc, const char*const* argv);
 
+  /* Wali Edits New Functions */
   void updateRouteTrust(Path path, float value);
 
   void getRoutes(Path cacheContent[], int& size);
+
+  void incrementSendCount(Path routeUsed);
+  void incrementAckedCount(Path routeUsed);
+  void resetCount();
 
 protected:
   Cache *primary_cache;   /* routes that we are using, or that we have reason
@@ -432,14 +437,35 @@ MobiCache::updateRouteTrust(Path path, float value){
 
 void MobiCache::getRoutes(Path cacheContent[], int& size){
 	size = primary_cache->size;
-	/*cacheContent = new Path[primary_cache->size];*/
 	for(int i=0; i<primary_cache->size; i++){
 		cacheContent[i] = primary_cache->cache[i];
 	}
-
-
 }
 
+void MobiCache::incrementSendCount(Path routeUsed){
+	for(int i=0; i<primary_cache->size; i++){
+		if(routeUsed==primary_cache->cache[i]){
+			primary_cache->cache[i].pktSentWithThisRoute();
+			break;
+		}
+	}
+}
+
+void MobiCache::incrementAckedCount(Path routeUsed){
+	for(int i=0; i<primary_cache->size; i++){
+		if(routeUsed==primary_cache->cache[i]){
+			primary_cache->cache[i].pktAckWithThisRoute();
+			break;
+		}
+	}
+}
+
+void MobiCache::resetCount(){
+	/*for(int i=0; i<primary_cache->size; i++){
+		primary_cache->cache[i].resetPktsSent();
+		primary_cache->cache[i].resetPktsAcked();
+	}*/
+}
 
 
 /* End of Edit */

@@ -246,8 +246,8 @@ DSRAgent::buildTrust(){
 		if(cacheEntries[i].length()==0){
 			continue;
 		}
-		trace("Route %s: blah blah blah",cacheEntries[i].dump());
-		trace("Packets sent %d and Packets Acks back %d",cacheEntries[i].getPktsSent(),cacheEntries[i].getPktsAcked());
+		trace("Route %s:",cacheEntries[i].dump());
+		trace("Packets sent %ld and Packets Acks back %ld",cacheEntries[i].getPktsSent(),cacheEntries[i].getPktsAcked());
 	/*	trace(" %u is the destination",cacheEntries[i][cacheEntries[i].length()-1].addr);
 		trace(" %u is my net id ",net_id.addr);*/
 		SRPacket pingPacket;
@@ -648,7 +648,7 @@ DSRAgent::recv(Packet* packet, Handler*)
   /* handle packets with a MAC destination address of this host, or
      the MAC broadcast addr */
 {
-	trace("Received a Packet. My ID : %u",MAC_id.addr);
+
   hdr_sr *srh =  hdr_sr::access(packet);
   hdr_ip *iph =  hdr_ip::access(packet);
   hdr_cmn *cmh =  hdr_cmn::access(packet);
@@ -673,6 +673,13 @@ DSRAgent::recv(Packet* packet, Handler*)
   //p.src = ID(iph->src(),::IP);
   p.dest = ID((Address::instance().get_nodeaddr(iph->daddr())),::IP);
   p.src = ID((Address::instance().get_nodeaddr(iph->saddr())),::IP);
+
+  /*
+   * Wali Edit
+   * Recieved a Packet
+   */
+  //trace("Received a Packet. My ID : %u",MAC_id.addr);
+  //route_cache->incrementSendCount(p.route);
 
   assert(logtarget != 0);
 
@@ -1315,7 +1322,11 @@ DSRAgent::sendOutPacketWithRoute(SRPacket& p, bool fresh, Time delay)
      //  is false then our caller wants us use a path with the index
  //  set as it currently isk
 {
+  /* Wali Edit : Log Sending of Packet */
   trace ("Sending out Packet! My id : %u", MAC_id.addr);
+  route_cache->incrementSendCount(p.route);
+
+
   hdr_sr *srh =  hdr_sr::access(p.pkt);
   hdr_cmn *cmnh = hdr_cmn::access(p.pkt);
 

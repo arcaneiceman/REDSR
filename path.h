@@ -64,7 +64,7 @@ extern "C" {
 
 #include <packet.h>
 #include "hdr_sr.h"
-
+#include <iostream>
 class Path;			// forward declaration
 
 // state used for tracing the performance of the caches
@@ -173,7 +173,10 @@ public:
   void pktSentWithThisRoute(){ pktsSent++;}
   void pktAckWithThisRoute(){pktsAcked++;}
 
-  long getPktsSent(){ return pktsSent;}
+  void resetPktsSent(){pktsSent=0;}
+  void resetPktsAcked(){pktsAcked=0;}
+
+  long getPktsSent(){return pktsSent;}
   long getPktsAcked(){ return pktsAcked;}
 
   void checkpath(void) const;

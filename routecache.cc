@@ -62,6 +62,7 @@ extern "C" {
 #include "path.h"
 #include "routecache.h"
 #include <god.h>
+#include <iostream>
 
 static const int verbose_debug = 0;
 
@@ -148,9 +149,11 @@ RouteCache::trace(char* fmt, ...)
   va_end(ap);
 }
 
-void RouteCache::getRoutes(Path cacheContent[], int& size){
-
-}
+/* Wali Edit : Empty Functions Implemtnation is in MobiCache */
+void RouteCache::getRoutes(Path cacheContent[], int& size){cout<<" Not Implemented" <<endl;}
+void RouteCache::incrementSendCount(Path routeUsed){cout<<" Not Implemented" <<endl;};
+void RouteCache::incrementAckedCount(Path routeUsed){cout<<" Not Implemented" <<endl;};
+void RouteCache::resetCount(){cout<<" Not Implemented" <<endl;};
 
 void
 RouteCache::dump(FILE *out)

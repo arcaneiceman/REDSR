@@ -103,6 +103,12 @@ public:
 
   virtual void getRoutes(Path cacheContent[],int& size);
 
+  virtual void incrementSendCount(Path routeUsed);
+
+  virtual void incrementAckedCount(Path routeUsed);
+
+  virtual void resetCount();
+
   /* End of Edits */
   // *******************************************************
 

@@ -288,14 +288,14 @@ MobiCache::periodic_checkCache()
 ----------------------------------------------------------------*/
 
 void
-MobiCache::updateRouteTrust(Path path, float value){
+MobiCache::updateRouteTrust(Path path, float value){}
 
-}
+void MobiCache::getRoutes(Path cacheContent[], int& size){}
+void MobiCache::incrementSendCount(Path routeUsed){}
+void MobiCache::incrementAckedCount(Path routeUsed){}
+void MobiCache::resetCount(){}
 
-void MobiCache::getRoutes(Path cacheContent[], int& size){
 
-
-}
 void
 MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 // add this route to the cache (presumably we did a route request

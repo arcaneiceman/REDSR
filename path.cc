@@ -211,6 +211,8 @@ Path::Path(const Path& old)
   cur_index = old.cur_index;
   path_owner = old.path_owner;
   trustValue = 0;
+  pktsSent = 0;
+  pktsAcked = 0;
 }
 
 Path::~Path()
@@ -245,6 +247,9 @@ Path::operator=(const Path &rhs)
       len = rhs.len;
       for (int c = 0 ; c < len ; c++)
 	path[c] = rhs.path[c];
+      trustValue = rhs.trustValue;
+      pktsSent = rhs.pktsSent;
+      pktsAcked = rhs.pktsAcked;
     }
   // note: i don't return *this cause I don't think assignments should
   // be expressions (and it has slightly incorrect semantics: (a=b) should
