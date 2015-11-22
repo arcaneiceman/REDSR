@@ -249,12 +249,17 @@ DSRAgent::buildTrust(){
 		trace("Packets sent %ld and Packets Acks back %ld",cacheEntries[i].getPktsSent(),cacheEntries[i].getPktsAcked());
 	/*	trace(" %u is the destination",cacheEntries[i][cacheEntries[i].length()-1].addr);
 		trace(" %u is my net id ",net_id.addr);*/
-		SRPacket pingPacket;
-		pingPacket.dest = cacheEntries[i][cacheEntries[i].length()-1];
-		pingPacket.src = net_id;
-		pingPacket.route = cacheEntries[i];
-
-		//sendOutPacketWithRoute(pingPacket, false);
+		LastUsedRoute lur;
+		lur.destination.addr = 99999999; //Nonsensical Address
+		getLastUsedRouteForDestination(cacheEntries[i][cacheEntries[i].length()-1],lur);
+		if(lur.destination.addr!= 99999999){
+			SRPacket pingPacket;
+			pingPacket.dest = cacheEntries[i][cacheEntries[i].length()-1];
+			pingPacket.src = net_id;
+			pingPacket.route = cacheEntries[i];
+			pingPacket.pkt = allocpkt();
+			sendOutPacketWithRoute(pingPacket,false);
+		}
 	}
 }
 
@@ -264,7 +269,6 @@ DSRAgent::addOrUpdateLastUsedRoute(ID dest, SRPacket pkt, Path p){
 	for(int i =0; i<lastusedroutes.size(); i++){
 		if(lastusedroutes[i].destination==dest){
 			lastusedroutes[i].pathUsed = p;
-			lastusedroutes[i].pkt = pkt;
 			found = true;
 			//trace("LUR : Destination=%d PathUsed=%s",dest,p.dump());
 		}
@@ -273,11 +277,10 @@ DSRAgent::addOrUpdateLastUsedRoute(ID dest, SRPacket pkt, Path p){
 		LastUsedRoute lur;
 		lur.destination = dest;
 		lur.pathUsed = p;
-		lur.pkt = pkt;
 		lastusedroutes.push_back(lur);
 		//trace("LUR Added: Destination=%u PathUsed=%s",dest,p.dump());
 	}
-	cout << "Adding/Updating for Desination " << dest.addr << " with path " << p.dump();
+	//cout << "Adding/Updating for Desination " << dest.addr << " with path " << p.dump();
 }
 
 void DSRAgent::getLastUsedRouteForDestination(ID dest, LastUsedRoute& lur){
@@ -718,12 +721,12 @@ DSRAgent::recv(Packet* packet, Handler*)
 	  trace("Path received : %s ",p.route.dump());
 	  trace("Packet Dest : %s , Packet Source : %s",p.dest.dump(),p.src.dump());
   }
- /* End of Wali Edit */
+
+  /* End of Wali Edit */
 
   assert(logtarget != 0);
 
   if (srh->valid() != 1) {
-	  trace("Flag 1");
     unsigned int dst = cmh->next_hop();
     if (dst == IP_BROADCAST) {
       // extensions for mobileIP --Padma, 04/99.
@@ -1059,6 +1062,8 @@ DSRAgent::handleForwarding(SRPacket &p)
 
   assert(p.pkt); // make sure flow state didn't eat the pkt
 
+
+
   // first make sure we are the ``current'' host along the source route.
   // if we're not, the previous node set up the source route incorrectly.
   assert(p.route[p.route.index()] == net_id
@@ -1089,8 +1094,11 @@ DSRAgent::handleForwarding(SRPacket &p)
     p.pkt = 0;
     return;
   }
-
+  trace("I am Node %ld",MAC_id.addr );
+  trace("Forwarding Packet : Src %ld , Dst %ld, Route : %s",p.src.addr,p.dest.addr,p.route.dump());
   // now forward the packet...
+
+  if(malicious){cout<<"I am Malicious"<<endl;return;}
   sendOutPacketWithRoute(p, false);
 }
 
@@ -1363,9 +1371,17 @@ DSRAgent::sendOutPacketWithRoute(SRPacket& p, bool fresh, Time delay)
  //  set as it currently isk
 {
   /* Wali Edit : Log Sending of Packet */
+
   trace ("Sending out Packet! My id : %u", MAC_id.addr);
+  trace ("Route used : %s", p.route.dump());
   route_cache->incrementSendCount(p.route);
   addOrUpdateLastUsedRoute(p.dest, p, p.route);
+
+  //If we dont have sample packet. we take a packet from this
+ /* if(!haveSamplePacket){
+	  samplePacket = p.pkt;
+	  haveSamplePacket = true;
+  }*/
 
 
   hdr_sr *srh =  hdr_sr::access(p.pkt);

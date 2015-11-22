@@ -85,7 +85,6 @@ class DSRAgent;
 struct LastUsedRoute{
 		ID destination;
 		Path p;
-		SRPacket pkt;
 };
 
 class ArpCallbackClass;
@@ -151,6 +150,8 @@ private:
   bool malicious;
 
   std::vector<LastUsedRoute> lastusedroutes;
+  //Packet* samplePacket;
+  //bool haveSamplePacket = false;
 
   // will eventually need to handle multiple infs, but this is okay for
   // now 1/28/98 -dam
