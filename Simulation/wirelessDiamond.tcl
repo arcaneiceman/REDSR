@@ -72,6 +72,9 @@ $ns_ trace-all $tracefd
 set namtrace [open wireless_diamond.nam w]
 $ns_ namtrace-all-wireless $namtrace $val(x) $val(y)
 
+#Define different colors for data flows
+$ns_ color 2 Blue
+
 # set up topography object
 set topo       [new Topography]
 
@@ -162,13 +165,17 @@ set node_(2) [$ns_ node]
 #Node D Config set
 set node_(3) [$ns_ node]
 
+#Setting Random Motion to False
 $node_(0) random-motion 0
 $node_(1) random-motion 0
 $node_(2) random-motion 0
 $node_(3) random-motion 0
 
-
-
+#Setting Node Colors
+$node_(0) color Green
+$node_(1) color Green
+$node_(2) color Green
+$node_(3) color Red
 #
 # Provide initial (X,Y, for now Z=0) co-ordinates for mobilenodes
 #
@@ -212,13 +219,6 @@ $ns_ at 21.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 24.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 27.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 30.0 "[$node_(0) set ragent_] buildtrust"
-
-
-$ns_ at .0 "[$node_(0) set ragent_] mac-addr 0"
-$ns_ at 0.0 "[$node_(1) set ragent_] mac-addr 1"
-$ns_ at 0.0 "[$node_(2) set ragent_] mac-addr 2"
-$ns_ at 0.0 "[$node_(3) set ragent_] mac-addr 3"
-
 
 for {set i 0} {$i < $val(nn)} {incr i} {
 	$ns_ initial_node_pos $node_($i) 5

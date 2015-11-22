@@ -82,6 +82,12 @@ class DSRAgent;
 
 #define DSR_FILTER_TAP		/* process a packet only once via the tap */
 
+struct LastUsedRoute{
+		ID destination;
+		Path p;
+		SRPacket pkt;
+};
+
 class ArpCallbackClass;
 struct RtRepHoldoff {
   ID requestor;
@@ -100,6 +106,7 @@ struct GratReplyHoldDown {
   Path p;
 };
 
+
 class SendBufferTimer : public TimerHandler {
 public:
   SendBufferTimer(DSRAgent *a) : TimerHandler() { a_ = a;}
@@ -112,6 +119,12 @@ LIST_HEAD(DSRAgent_List, DSRAgent);
 
 class DSRAgent : public Tap, public Agent {
 public:
+
+	struct LastUsedRoute{
+		ID destination;
+		Path pathUsed;
+		SRPacket pkt;
+	};
 
   virtual int command(int argc, const char*const* argv);
   virtual void recv(Packet*, Handler* callback = 0);
@@ -136,6 +149,8 @@ private:
   int off_sr_;
   // flag for malicious node
   bool malicious;
+
+  std::vector<LastUsedRoute> lastusedroutes;
 
   // will eventually need to handle multiple infs, but this is okay for
   // now 1/28/98 -dam
@@ -270,6 +285,9 @@ private:
    * Wali Edit : Trust Building Function
    */
   void buildTrust();
+  void addOrUpdateLastUsedRoute(ID dest, SRPacket pkt, Path p);
+  void getLastUsedRouteForDestination(ID dest, LastUsedRoute& lur);
+
 
   friend void XmitFailureCallback(Packet *pkt, void *data);
   friend void XmitFlowFailureCallback(Packet *pkt, void *data);

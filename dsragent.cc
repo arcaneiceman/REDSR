@@ -241,7 +241,6 @@ DSRAgent::buildTrust(){
 	Path cacheEntries[30];
 	int numOfEntries;
 	route_cache->getRoutes(cacheEntries,numOfEntries);
-	cout << "Num of Entries is " << numOfEntries << endl;
 	for(int i=0; i<numOfEntries; i++){
 		if(cacheEntries[i].length()==0){
 			continue;
@@ -259,8 +258,35 @@ DSRAgent::buildTrust(){
 	}
 }
 
+void
+DSRAgent::addOrUpdateLastUsedRoute(ID dest, SRPacket pkt, Path p){
+	bool found = false;
+	for(int i =0; i<lastusedroutes.size(); i++){
+		if(lastusedroutes[i].destination==dest){
+			lastusedroutes[i].pathUsed = p;
+			lastusedroutes[i].pkt = pkt;
+			found = true;
+			//trace("LUR : Destination=%d PathUsed=%s",dest,p.dump());
+		}
+	}
+	if(!found){
+		LastUsedRoute lur;
+		lur.destination = dest;
+		lur.pathUsed = p;
+		lur.pkt = pkt;
+		lastusedroutes.push_back(lur);
+		//trace("LUR Added: Destination=%u PathUsed=%s",dest,p.dump());
+	}
+	cout << "Adding/Updating for Desination " << dest.addr << " with path " << p.dump();
+}
 
-
+void DSRAgent::getLastUsedRouteForDestination(ID dest, LastUsedRoute& lur){
+	for(int i=0; i<lastusedroutes.size();i++){
+		if(lastusedroutes[i].destination==dest){
+			lur = lastusedroutes[i];
+		}
+	}
+}
 
 /*===========================================================================
   SendBuf management and helpers
@@ -676,14 +702,28 @@ DSRAgent::recv(Packet* packet, Handler*)
 
   /*
    * Wali Edit
-   * Recieved a Packet
+   * Recieved a Packet ... But is it an Ack?!
+   * I guess we can check if we are the destination
+   * If We are then its an Ack
    */
-  //trace("Received a Packet. My ID : %u",MAC_id.addr);
-  //route_cache->incrementSendCount(p.route);
+
+  if(p.dest == net_id || p.src != net_id){
+	  trace("Received a Packet. My ID : %u",MAC_id.addr);
+	  LastUsedRoute lur;
+	  lur.destination.addr = 99999999; //Nonsensical Address
+	  getLastUsedRouteForDestination(p.src,lur);
+	  if(lur.destination.addr!= 99999999){
+		  route_cache->incrementAckedCount(lur.pathUsed);
+	  }
+	  trace("Path received : %s ",p.route.dump());
+	  trace("Packet Dest : %s , Packet Source : %s",p.dest.dump(),p.src.dump());
+  }
+ /* End of Wali Edit */
 
   assert(logtarget != 0);
 
   if (srh->valid() != 1) {
+	  trace("Flag 1");
     unsigned int dst = cmh->next_hop();
     if (dst == IP_BROADCAST) {
       // extensions for mobileIP --Padma, 04/99.
@@ -1325,6 +1365,7 @@ DSRAgent::sendOutPacketWithRoute(SRPacket& p, bool fresh, Time delay)
   /* Wali Edit : Log Sending of Packet */
   trace ("Sending out Packet! My id : %u", MAC_id.addr);
   route_cache->incrementSendCount(p.route);
+  addOrUpdateLastUsedRoute(p.dest, p, p.route);
 
 
   hdr_sr *srh =  hdr_sr::access(p.pkt);
