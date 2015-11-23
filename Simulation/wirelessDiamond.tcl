@@ -205,8 +205,12 @@ $node_(2) set Z_ 0.0
 $node_(3) set X_ 125.0
 $node_(3) set Y_ 25.0
 $node_(3) set Z_ 0.0
-#$ns_ at 9.0 "[$node_(3) set ragent_] malicious"
 
+$ns_ at 7.0 "[$node_(3) set ragent_] malicious"
+$ns_ at 9.0 "[$node_(0) set ragent_] resetTrust"
+$ns_ at 9.0 "[$node_(1) set ragent_] resetTrust"
+$ns_ at 9.0 "[$node_(2) set ragent_] resetTrust"
+$ns_ at 9.0 "[$node_(3) set ragent_] resetTrust"
 #
 
 #Mac ID 
@@ -222,24 +226,10 @@ $ns_ at 9.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 12.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 15.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 18.0 "[$node_(0) set ragent_] buildtrust"
-$ns_ at 21.0 "[$node_(0) set ragent_] buildtrust"
-$ns_ at 24.0 "[$node_(0) set ragent_] buildtrust"
-$ns_ at 27.0 "[$node_(0) set ragent_] buildtrust"
-$ns_ at 30.0 "[$node_(0) set ragent_] buildtrust"
-
 
 for {set i 0} {$i < $val(nn)} {incr i} {
 	$ns_ initial_node_pos $node_($i) 5
 }
-
-# Now produce some simple node movements
-# Node_(1) starts to move towards node_(0)
-#
-#$ns_ at 3.0 "$node_(1) setdest 50.0 40.0 25.0"
-#$ns_ at 3.0 "$node_(0) setdest 48.0 38.0 5.0"
-
-# Node_(1) then starts to move away from node_(0)
-#$ns_ at 20.0 "$node_(1) setdest 490.0 480.0 30.0" 
 
 # Setup traffic flow between nodes
 # TCP connections between node_(0) and node_(1)
@@ -270,10 +260,10 @@ $ns_ at 3.0 "$ftp start"
 # Tell nodes when the simulation ends
 #
 for {set i 0} {$i < $val(nn) } {incr i} {
-    $ns_ at 30.0 "$node_($i) reset";
+    $ns_ at 16.0 "$node_($i) reset";
 }
-$ns_ at 30.0 "stop"
-$ns_ at 30.01 "puts \"NS EXITING...\" ; $ns_ halt"
+$ns_ at 18.0 "stop"
+$ns_ at 18.01 "puts \"NS EXITING...\" ; $ns_ halt"
 proc stop {} {
     global ns_ tracefd
     $ns_ flush-trace

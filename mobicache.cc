@@ -193,6 +193,7 @@ public:
   void resetRouteSendRecvCount(Path path);
   void incrementSendCount(Path routeUsed);
   void incrementAckedCount(Path routeUsed);
+  void ResetPositveTrust();
   void resetCount();
 
 protected:
@@ -423,6 +424,15 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 /*
  * Wali Edit : Trust Functions
  */
+void
+MobiCache::ResetPositveTrust(){
+	trace("Resetting Trust");
+	for(int i=0 ; i<primary_cache->size; i++){
+		primary_cache->cache[i].setTrust(0.8);
+	}
+}
+
+
 void
 MobiCache::updateRouteTrust(Path path, double value){
 	for(int i=0 ; i<primary_cache->size; i++){

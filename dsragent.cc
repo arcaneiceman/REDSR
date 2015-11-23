@@ -255,7 +255,7 @@ DSRAgent::buildTrust(){
 			route_cache->updateRouteTrust(cacheEntries[i],(double)ack/(double)sent);
 			route_cache->resetRouteSendRecvCount(cacheEntries[i]);
 		}
-		else if (cacheEntries[i].getPktsSent()>0 && cacheEntries[i].getPktsAcked()==0) {
+		else if (cacheEntries[i].getPktsSent()>1 && cacheEntries[i].getPktsAcked()==0) {
 			route_cache->updateRouteTrust(cacheEntries[i],0.1);
 			trace("Trust is %f", 0.1);
 			route_cache->resetRouteSendRecvCount(cacheEntries[i]);
@@ -274,6 +274,7 @@ DSRAgent::buildTrust(){
 			pingPacket.route = cacheEntries[i];
 			pingPacket.pkt = allocpkt();
 			//for(int i=0; i<10; i++){
+			//sendOutPacketWithRoute(pingPacket,false);
 			//sendOutPacketWithRoute(pingPacket,false);
 			//}
 
@@ -532,17 +533,17 @@ DSRAgent::command(int argc, const char*const* argv)
 	  return TCL_OK;
 	}
       if (strcasecmp(argv[1], "malicious") == 0)
-	{
-    	  trace("Malicious set to true");
-	  malicious = true;
-	  return TCL_OK;
-	}
-      if (strcasecmp(argv[1], "malicious") == 0)
       	{
-          	  trace("Malicious set to true");
-      	  malicious = true;
+          trace("Node %u: Malicious set to %d",MAC_id.addr,(int)!malicious);
+      	  malicious = !malicious;
+
       	  return TCL_OK;
       	}
+      if (strcasecmp(argv[1], "resetTrust") == 0)
+		{
+		  route_cache->ResetPositveTrust();
+		  return TCL_OK;
+		}
       if (strcasecmp(argv[1], "buildtrust") == 0)
 		{
     	  buildTrust();

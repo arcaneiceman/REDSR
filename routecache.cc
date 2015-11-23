@@ -150,6 +150,9 @@ RouteCache::trace(char* fmt, ...)
 }
 
 /* Wali Edit : Empty Functions Implemtnation is in MobiCache */
+void RouteCache::ResetPositveTrust(){}
+void RouteCache::updateRouteTrust(Path path, double value){}
+void RouteCache::resetRouteSendRecvCount(Path path){}
 void RouteCache::getRoutes(Path cacheContent[], int& size){cout<<" Not Implemented" <<endl;}
 void RouteCache::incrementSendCount(Path routeUsed){cout<<" Not Implemented" <<endl;};
 void RouteCache::incrementAckedCount(Path routeUsed){cout<<" Not Implemented" <<endl;};

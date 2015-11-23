@@ -288,6 +288,9 @@ MobiCache::periodic_checkCache()
 ----------------------------------------------------------------*/
 
 void
+MobiCache::ResetPositveTrust(){}
+
+void
 MobiCache::updateRouteTrust(Path path, double value){}
 
 void MobiCache::getRoutes(Path cacheContent[], int& size){}
