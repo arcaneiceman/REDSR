@@ -252,15 +252,10 @@ DSRAgent::buildTrust(){
 			double sent = (double)cacheEntries[i].getPktsSent();
 			//double trust = (double)ack/sent;
 			trace("Trust is %f", (double)ack/(double)sent);
-			route_cache->updateRouteTrust(cacheEntries[i],(double)ack/(double)sent);
+			//route_cache->updateRouteTrust(cacheEntries[i],(double)ack/(double)sent);
 			route_cache->resetRouteSendRecvCount(cacheEntries[i]);
 		}
-		else if (cacheEntries[i].getPktsSent()>1 && cacheEntries[i].getPktsAcked()==0) {
-			route_cache->updateRouteTrust(cacheEntries[i],0.1);
-			trace("Trust is %f", 0.1);
-			route_cache->resetRouteSendRecvCount(cacheEntries[i]);
-		}
-		else {}
+
 		//
 	/*	trace(" %u is the destination",cacheEntries[i][cacheEntries[i].length()-1].addr);
 		trace(" %u is my net id ",net_id.addr);*/
@@ -541,7 +536,8 @@ DSRAgent::command(int argc, const char*const* argv)
       	}
       if (strcasecmp(argv[1], "resetTrust") == 0)
 		{
-		  route_cache->ResetPositveTrust();
+    	  trace("Reseeting Trust to make first cache entry low trust");
+		  route_cache->ResetTrust();
 		  return TCL_OK;
 		}
       if (strcasecmp(argv[1], "buildtrust") == 0)
@@ -739,6 +735,13 @@ DSRAgent::recv(Packet* packet, Handler*)
 	  trace("Packet Dest : %s , Packet Source : %s",p.dest.dump(),p.src.dump());
   }
 
+  if(malicious && srh->num_addrs()==0){
+		trace("Malicious Node Here. Dropping Packet");
+		Packet::free(p.pkt);
+		p.pkt =0;
+		goto done;
+	}
+
 
   /* End of Wali Edit */
 
@@ -790,14 +793,6 @@ DSRAgent::recv(Packet* packet, Handler*)
 	}
       else
 	{ // we're not the intended final recpt, but we're a hop
-    	if(malicious && srh->num_addrs()==0){
-    		trace("Malicious Node Here. Dropping Packet");
-			Packet::free(p.pkt);
-		    p.pkt =0;
-		    goto done;
-    	}
-
-
 	  handleForwarding(p);
 	}
     }

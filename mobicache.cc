@@ -193,7 +193,7 @@ public:
   void resetRouteSendRecvCount(Path path);
   void incrementSendCount(Path routeUsed);
   void incrementAckedCount(Path routeUsed);
-  void ResetPositveTrust();
+  void ResetTrust();
   void resetCount();
 
 protected:
@@ -401,9 +401,9 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 
   /* Wali Edit : Adding Trust */
 
-  //Finding Min of Path
+  //Finding Min of Path (but not destination)
   double minTrust = 1.0;
-  for(int i=0; i<rt.length(); i++ ){
+  for(int i=0; i<rt.length()-1; i++ ){
 	  long nodeID = rt[i].addr;
 	  double nodeTrust = trustValues[nodeID];
 	  if(nodeTrust < minTrust){
@@ -425,11 +425,15 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
  * Wali Edit : Trust Functions
  */
 void
-MobiCache::ResetPositveTrust(){
+MobiCache::ResetTrust(){
 	trace("Resetting Trust");
-	for(int i=0 ; i<primary_cache->size; i++){
-		primary_cache->cache[i].setTrust(0.8);
+	//For experimental purpose, Making first cache trust go down
+	if(primary_cache->cache[0].size()>0){
+		primary_cache->cache[0].setTrust(0.2);
 	}
+	// Specfic to Scenario
+	trustValues[3] = 0.2d;
+	trace("Now %s has trust %f",primary_cache->cache[0].dump(),primary_cache->cache[0].getTrust());
 }
 
 
@@ -669,15 +673,18 @@ Cache::searchRoute(const ID& dest, int& i, Path &path, int &index)
   // look for dest in cache, starting at index, 
   //if found, return true with path s.t. cache[index] == path && path[i] == dest
 {
-  for (; index < size; index++)
-    for (int n = 0 ; n < cache[index].length(); n++)
-      if (cache[index][n] == dest && cache[index].getTrust() >= 0.5d)
-	{
-	  i = n;
-	  path = cache[index];
-	  return true;
-	}
-  return false;
+	bool found = false;
+	double currentTrust = 0;
+	for (; index < size; index++)
+		for (int n = 0 ; n < cache[index].length(); n++)
+			if (cache[index][n] == dest && cache[index].getTrust() >= 0.5d && cache[index].getTrust()>currentTrust)
+			{
+				currentTrust = cache[index].getTrust();
+				i = n;
+				path = cache[index];
+				found = true;
+			}
+	return found;
 }
 
 Path*

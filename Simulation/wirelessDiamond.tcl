@@ -171,11 +171,7 @@ $node_(1) random-motion 0
 $node_(2) random-motion 0
 $node_(3) random-motion 0
 
-#Setting Node Colors
-$node_(0) color Green
-$node_(1) color Green
-$node_(2) color Green
-$node_(3) color Red
+
 #
 # Provide initial (X,Y, for now Z=0) co-ordinates for mobilenodes
 #
@@ -206,11 +202,11 @@ $node_(3) set X_ 125.0
 $node_(3) set Y_ 25.0
 $node_(3) set Z_ 0.0
 
-$ns_ at 7.0 "[$node_(3) set ragent_] malicious"
+$ns_ at 8.0 "[$node_(3) set ragent_] malicious"
 $ns_ at 9.0 "[$node_(0) set ragent_] resetTrust"
 $ns_ at 9.0 "[$node_(1) set ragent_] resetTrust"
-$ns_ at 9.0 "[$node_(2) set ragent_] resetTrust"
-$ns_ at 9.0 "[$node_(3) set ragent_] resetTrust"
+#$ns_ at 9.0 "[$node_(2) set ragent_] resetTrust"
+#$ns_ at 9.0 "[$node_(3) set ragent_] resetTrust"
 #
 
 #Mac ID 
@@ -244,26 +240,28 @@ $ns_ connect $tcp $sink
 set ftp [new Application/FTP]
 $ftp attach-agent $tcp
 $ns_ at 3.0 "$ftp start" 
+$ns_ at 9.0 "$ftp stop"
+$ns_ at 9.2 "$ftp start"
 
-set tcp [new Agent/TCP]
-$tcp set class_ 2
-set sink [new Agent/TCPSink]
-$ns_ attach-agent $node_(1) $tcp
-$ns_ attach-agent $node_(0) $sink
-$ns_ connect $tcp $sink
-set ftp [new Application/FTP]
-$ftp attach-agent $tcp
-$ns_ at 3.0 "$ftp start" 
+#set tcp [new Agent/TCP]
+#$tcp set class_ 2
+#set sink [new Agent/TCPSink]
+#$ns_ attach-agent $node_(1) $tcp
+#$ns_ attach-agent $node_(0) $sink
+#$ns_ connect $tcp $sink
+#set ftp [new Application/FTP]
+#$ftp attach-agent $tcp
+#$ns_ at 3.0 "$ftp start" 
 
 
 #
 # Tell nodes when the simulation ends
 #
 for {set i 0} {$i < $val(nn) } {incr i} {
-    $ns_ at 16.0 "$node_($i) reset";
+    $ns_ at 30.0 "$node_($i) reset";
 }
-$ns_ at 18.0 "stop"
-$ns_ at 18.01 "puts \"NS EXITING...\" ; $ns_ halt"
+$ns_ at 30.0 "stop"
+$ns_ at 30.01 "puts \"NS EXITING...\" ; $ns_ halt"
 proc stop {} {
     global ns_ tracefd
     $ns_ flush-trace

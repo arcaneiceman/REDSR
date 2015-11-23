@@ -101,7 +101,7 @@ public:
 
   /*Wali Edits */
 
-  virtual void ResetPositveTrust();
+  virtual void ResetTrust();
 
   virtual void getRoutes(Path cacheContent[],int& size);
 
