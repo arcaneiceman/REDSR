@@ -151,6 +151,7 @@ private:
 
 	int num_addrs_;
 	int cur_addr_;
+
 	struct sr_addr addrs_[MAX_SR_LEN];
 
 	struct route_request	sr_request_;
@@ -268,6 +269,7 @@ public:
 		salvaged_ = 0;
 		num_addrs_ = 0;
 		cur_addr_ = 0;
+		number = 0;
 
 		route_request() = 0;
 		route_reply() = 0;
@@ -302,6 +304,9 @@ public:
 
   void dump(char *);
   char* dump();
+
+
+  unsigned long number;
 };
 
 

@@ -103,6 +103,10 @@ public:
 
   virtual void getRoutes(Path cacheContent[],int& size);
 
+  virtual void updateRouteTrust(Path path, double value);
+
+  virtual void resetRouteSendRecvCount(Path path);
+
   virtual void incrementSendCount(Path routeUsed);
 
   virtual void incrementAckedCount(Path routeUsed);

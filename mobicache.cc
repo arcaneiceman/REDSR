@@ -187,10 +187,10 @@ public:
   int command(int argc, const char*const* argv);
 
   /* Wali Edits New Functions */
-  void updateRouteTrust(Path path, float value);
+  void updateRouteTrust(Path path, double value);
 
   void getRoutes(Path cacheContent[], int& size);
-
+  void resetRouteSendRecvCount(Path path);
   void incrementSendCount(Path routeUsed);
   void incrementAckedCount(Path routeUsed);
   void resetCount();
@@ -388,8 +388,6 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
   if(pre_addRoute(route, rt, t, who_from) == 0)
     return;
 
-  trace("Adding Route. My ID : %u",MAC_id.addr);
-  trace("Route is %s",rt.dump());
   // must call addRoute before checkRoute
   int prefix_len = 0;
 
@@ -411,8 +409,7 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
 		  minTrust = nodeTrust;
 	  }
   }
-  trace("Min Trust for this Route is %f", minTrust);
-
+  trace("Adding Route. My ID : %u . Route : %s . Trust is %f",MAC_id.addr,rt.dump(),minTrust);
   for(int i=0; i<primary_cache->size; i++){
 	  if(primary_cache->cache[i]==rt){
 		  //Set this on min function
@@ -427,10 +424,20 @@ MobiCache::addRoute(const Path& route, Time t, const ID& who_from)
  * Wali Edit : Trust Functions
  */
 void
-MobiCache::updateRouteTrust(Path path, float value){
+MobiCache::updateRouteTrust(Path path, double value){
 	for(int i=0 ; i<primary_cache->size; i++){
 		if(path==primary_cache->cache[i]){
 			primary_cache->cache[i].setTrust(value);
+		}
+	}
+}
+
+void
+MobiCache::resetRouteSendRecvCount(Path path){
+	for(int i=0 ; i<primary_cache->size; i++){
+		if(path==primary_cache->cache[i]){
+			primary_cache->cache[i].resetPktsSent();
+			primary_cache->cache[i].resetPktsAcked();
 		}
 	}
 }

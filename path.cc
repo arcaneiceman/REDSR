@@ -178,10 +178,10 @@ Path::Path(struct hdr_sr *srh)
 	for (int i = 0 ; i < len ; i++)
 		path[i] = ID(srh->addrs()[i]);
 
-	//trustValue = 0;
+	trustValue = 0;
 	//printf("Path made 3");
-	//pktsSent = 0;
-	//pktsAcked = 0;
+	pktsSent = 0;
+	pktsAcked = 0;
 }
 
 void

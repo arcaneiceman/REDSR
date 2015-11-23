@@ -66,6 +66,7 @@ struct SRPacket {
   ID src;
   Packet *pkt;			/* the inner NS packet */
   Path route;
+
   SRPacket(Packet *p, struct hdr_sr *srh) : pkt(p), route(srh) {}
   SRPacket() : pkt(NULL) {}
 };

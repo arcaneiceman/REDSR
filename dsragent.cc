@@ -247,6 +247,21 @@ DSRAgent::buildTrust(){
 		}
 		trace("Route %s:",cacheEntries[i].dump());
 		trace("Packets sent %ld and Packets Acks back %ld",cacheEntries[i].getPktsSent(),cacheEntries[i].getPktsAcked());
+		if(cacheEntries[i].getPktsAcked()!=0 && cacheEntries[i].getPktsSent()!=0 ){
+			double ack = (double)cacheEntries[i].getPktsAcked();
+			double sent = (double)cacheEntries[i].getPktsSent();
+			//double trust = (double)ack/sent;
+			trace("Trust is %f", (double)ack/(double)sent);
+			route_cache->updateRouteTrust(cacheEntries[i],(double)ack/(double)sent);
+			route_cache->resetRouteSendRecvCount(cacheEntries[i]);
+		}
+		else if (cacheEntries[i].getPktsSent()>0 && cacheEntries[i].getPktsAcked()==0) {
+			route_cache->updateRouteTrust(cacheEntries[i],0.1);
+			trace("Trust is %f", 0.1);
+			route_cache->resetRouteSendRecvCount(cacheEntries[i]);
+		}
+		else {}
+		//
 	/*	trace(" %u is the destination",cacheEntries[i][cacheEntries[i].length()-1].addr);
 		trace(" %u is my net id ",net_id.addr);*/
 		LastUsedRoute lur;
@@ -258,7 +273,10 @@ DSRAgent::buildTrust(){
 			pingPacket.src = net_id;
 			pingPacket.route = cacheEntries[i];
 			pingPacket.pkt = allocpkt();
-			sendOutPacketWithRoute(pingPacket,false);
+			//for(int i=0; i<10; i++){
+			//sendOutPacketWithRoute(pingPacket,false);
+			//}
+
 		}
 	}
 }
@@ -677,11 +695,9 @@ DSRAgent::recv(Packet* packet, Handler*)
   /* handle packets with a MAC destination address of this host, or
      the MAC broadcast addr */
 {
-
   hdr_sr *srh =  hdr_sr::access(packet);
   hdr_ip *iph =  hdr_ip::access(packet);
   hdr_cmn *cmh =  hdr_cmn::access(packet);
-
   // special process for GAF
   if (cmh->ptype() == PT_GAF) {
     if (iph->daddr() == (int)IP_BROADCAST) { 
@@ -722,6 +738,7 @@ DSRAgent::recv(Packet* packet, Handler*)
 	  trace("Packet Dest : %s , Packet Source : %s",p.dest.dump(),p.src.dump());
   }
 
+
   /* End of Wali Edit */
 
   assert(logtarget != 0);
@@ -747,7 +764,7 @@ DSRAgent::recv(Packet* packet, Handler*)
 	trace("S %.9f _%s_ originating %s -> %s",
 	      Scheduler::instance().clock(), net_id.dump(), p.src.dump(), 
 	      p.dest.dump());
-      handlePktWithoutSR(p, false);
+          handlePktWithoutSR(p, false);
       goto done;
     }
   }
@@ -772,6 +789,14 @@ DSRAgent::recv(Packet* packet, Handler*)
 	}
       else
 	{ // we're not the intended final recpt, but we're a hop
+    	if(malicious && srh->num_addrs()==0){
+    		trace("Malicious Node Here. Dropping Packet");
+			Packet::free(p.pkt);
+		    p.pkt =0;
+		    goto done;
+    	}
+
+
 	  handleForwarding(p);
 	}
     }
@@ -805,7 +830,6 @@ DSRAgent::handlePktWithoutSR(SRPacket& p, bool retry)
       handlePacketReceipt(p);
       return;
     }
-
   // Extensions for wired cum wireless simulation mode
   //if pkt dst outside my subnet, route to base_stn
 
@@ -815,12 +839,16 @@ DSRAgent::handlePktWithoutSR(SRPacket& p, bool retry)
   p.dest = dest;
   }
 
+
+  //return . Not handling packets without source
+  //return;
+
   if (route_cache->findRoute(p.dest, p.route, 1))
     { // we've got a route...
       if (verbose)
 	trace("S$hit %.5f _%s_ %s -> %s %s",
 	      Scheduler::instance().clock(), net_id.dump(),
-	      p.src.dump(), p.dest.dump(), p.route.dump());      
+	      p.src.dump(), p.dest.dump(), p.route.dump());
       sendOutPacketWithRoute(p, true);
       return;
     } // end if we have a route
@@ -923,6 +951,7 @@ DSRAgent::handleDefaultForwarding(SRPacket &p) {
     return;
   }
 
+  //if(malicious){cout<<"I am Malicious"<<endl;return;}
   // XXX should also check prevhop
 
   handleFlowForwarding(p, flowidx);
@@ -984,6 +1013,11 @@ DSRAgent::handleFlowForwarding(SRPacket &p, int flowidx) {
   }
   // set the direction pkt to be down
   cmnh->direction() = hdr_cmn::DOWN;
+
+ /* if(malicious && srh->num_addrs()==0){
+	  cout<<"I am Malicious"<<endl;
+	  return;
+  }*/
   Scheduler::instance().schedule(ll, p.pkt, 0);
   p.pkt = 0;
 }
@@ -1038,6 +1072,8 @@ DSRAgent::handleFlowForwarding(SRPacket &p) {
 
   srh->hopCount()++;
 
+  //if(malicious && srh->num_addrs()==0){cout<<"I am Malicious"<<endl;return;}
+
   // forward the packet
   handleFlowForwarding(p, flowidx);
 }
@@ -1051,6 +1087,9 @@ DSRAgent::handleForwarding(SRPacket &p)
   hdr_ip *iph = hdr_ip::access(p.pkt);
   hdr_cmn *ch =  hdr_cmn::access(p.pkt);
   bool flowOnly = !srh->num_addrs();
+
+
+
 
   if (srh->flow_header())
     handleFlowForwarding(p);
@@ -1098,7 +1137,7 @@ DSRAgent::handleForwarding(SRPacket &p)
   trace("Forwarding Packet : Src %ld , Dst %ld, Route : %s",p.src.addr,p.dest.addr,p.route.dump());
   // now forward the packet...
 
-  if(malicious){cout<<"I am Malicious"<<endl;return;}
+  //if(malicious && srh->num_addrs()==0){cout<<"I am Malicious"<<endl;return;}
   sendOutPacketWithRoute(p, false);
 }
 
@@ -1372,24 +1411,14 @@ DSRAgent::sendOutPacketWithRoute(SRPacket& p, bool fresh, Time delay)
 {
   /* Wali Edit : Log Sending of Packet */
 
-  trace ("Sending out Packet! My id : %u", MAC_id.addr);
+  /*trace ("Sending out Packet! My id : %u", MAC_id.addr);
   trace ("Route used : %s", p.route.dump());
   route_cache->incrementSendCount(p.route);
-  addOrUpdateLastUsedRoute(p.dest, p, p.route);
-
-  //If we dont have sample packet. we take a packet from this
- /* if(!haveSamplePacket){
-	  samplePacket = p.pkt;
-	  haveSamplePacket = true;
-  }*/
-
-
+  addOrUpdateLastUsedRoute(p.dest, p, p.route);*/
   hdr_sr *srh =  hdr_sr::access(p.pkt);
   hdr_cmn *cmnh = hdr_cmn::access(p.pkt);
-
   assert(srh->valid());
   assert(cmnh->size() > 0);
-
   ID dest;
   if (diff_subnet(p.dest,net_id)) {
   dest = ID(node_->base_stn(),::IP);
@@ -1583,6 +1612,14 @@ DSRAgent::sendOutPacketWithRoute(SRPacket& p, bool fresh, Time delay)
     { // no jitter required 
       Scheduler::instance().schedule(ll, p.pkt, delay);
     }
+
+  trace ("Sending out Packet! My id : %u", MAC_id.addr);
+  trace ("Route used : %s", p.route.dump());
+  route_cache->incrementSendCount(p.route);
+  addOrUpdateLastUsedRoute(p.dest, p, p.route);
+
+
+
   p.pkt = NULL; /* packet sent off */
 }
 

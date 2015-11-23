@@ -180,6 +180,12 @@ $node_(3) color Red
 # Provide initial (X,Y, for now Z=0) co-ordinates for mobilenodes
 #
 
+#         2(good)
+#    
+# 0                  1  
+#
+#         3(evil)
+
 #Node A
 $node_(0) set X_ 25.0
 $node_(0) set Y_ 75.0
@@ -190,16 +196,17 @@ $node_(1) set X_ 225.0
 $node_(1) set Y_ 75.0
 $node_(1) set Z_ 0.0
 
-#Node C (Evil)
+#Node C (Good)
 $node_(2) set X_ 125.0
 $node_(2) set Y_ 125.0
 $node_(2) set Z_ 0.0
-$ns_ at 0.0 "[$node_(2) set ragent_] malicious"
 
-#Node D (Good)
+#Node D (Evil)
 $node_(3) set X_ 125.0
 $node_(3) set Y_ 25.0
 $node_(3) set Z_ 0.0
+#$ns_ at 9.0 "[$node_(3) set ragent_] malicious"
+
 #
 
 #Mac ID 
@@ -219,6 +226,7 @@ $ns_ at 21.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 24.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 27.0 "[$node_(0) set ragent_] buildtrust"
 $ns_ at 30.0 "[$node_(0) set ragent_] buildtrust"
+
 
 for {set i 0} {$i < $val(nn)} {incr i} {
 	$ns_ initial_node_pos $node_($i) 5
@@ -242,6 +250,16 @@ $tcp set class_ 2
 set sink [new Agent/TCPSink]
 $ns_ attach-agent $node_(0) $tcp
 $ns_ attach-agent $node_(1) $sink
+$ns_ connect $tcp $sink
+set ftp [new Application/FTP]
+$ftp attach-agent $tcp
+$ns_ at 3.0 "$ftp start" 
+
+set tcp [new Agent/TCP]
+$tcp set class_ 2
+set sink [new Agent/TCPSink]
+$ns_ attach-agent $node_(1) $tcp
+$ns_ attach-agent $node_(0) $sink
 $ns_ connect $tcp $sink
 set ftp [new Application/FTP]
 $ftp attach-agent $tcp
