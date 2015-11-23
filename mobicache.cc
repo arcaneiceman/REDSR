@@ -432,7 +432,7 @@ MobiCache::ResetTrust(){
 		primary_cache->cache[0].setTrust(0.2);
 	}
 	// Specfic to Scenario
-	trustValues[3] = 0.2d;
+	//trustValues[3] = 0.2d;
 	trace("Now %s has trust %f",primary_cache->cache[0].dump(),primary_cache->cache[0].getTrust());
 }
 
